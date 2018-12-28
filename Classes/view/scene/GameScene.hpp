@@ -12,6 +12,7 @@
 #include "cocostudio/CocoStudio.h"
 #include "../layer/ActorLayer.hpp"
 #include "../layer/DragLayer.hpp"
+#include "../layer/CurveLayer.hpp"
 
 class GameScene : public cocos2d::Scene {
 public:
@@ -35,6 +36,7 @@ public:
 private:
     ActorLayer *actorLayer;
     DragLayer *dragLayer;
+    CurveLayer *curveLayer;
     
     bool loosed;
     CC_SYNTHESIZE_READONLY(bool, flipXOpt, FlipXOpt);

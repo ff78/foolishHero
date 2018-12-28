@@ -29,12 +29,11 @@ public:
     CREATE_FUNC(ActorLayer);
     
 private:
-
-    Hero *me;
-    Hero *master;
     
     cocos2d::EventListenerCustom *setupHeroListener;
-    cocos2d::EventListenerCustom *looseListener;
+    
+    CC_SYNTHESIZE_READONLY(Hero *, me, Me);
+    CC_SYNTHESIZE_READONLY(Hero *, master, Master);
 };
 
 #endif /* ActorLayer_hpp */

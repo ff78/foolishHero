@@ -42,6 +42,9 @@ bool GameScene::init()
         return false;
     }
     
+    curveLayer = CurveLayer::create();
+    addChild(curveLayer);
+    
     actorLayer = ActorLayer::create();
     addChild(this->actorLayer);
     
@@ -49,7 +52,6 @@ bool GameScene::init()
     addChild(dragLayer);
     
 
-    
     return true;
 }
 
@@ -72,8 +74,11 @@ void GameScene::update(float dt)
     if (drawBowing) {
         float angle = convertDrawAngle(dragLayer->getDragAngle());
         actorLayer->adjustBow(angle, dragLayer->getDragDistance());
+        curveLayer->adjustBow(angle, dragLayer->getDragDistance(), actorLayer->getMe()->getCurveId());
     }else if (loosed) {
-        actorLayer->testLoose(dt);
+//        actorLayer->testLoose(dt);
+        
+        curveLayer->testLoose(dt);
     }
 }
 
@@ -89,6 +94,9 @@ void GameScene::drawBow(cocos2d::EventCustom *event)
     L2E_DRAW_A_BOW info = *static_cast<L2E_DRAW_A_BOW *>(event->getUserData());
     if (info.userId == info.myUserId) {
         drawBowing = true;
+        
+        curveLayer->createCurve(actorLayer->getMe()->getPositionX(), actorLayer->getMe()->getPositionY());
+        actorLayer->getMe()->setCurveId(curveLayer->getMaxCurveId());
     }
     
 }
@@ -99,7 +107,13 @@ void GameScene::loose(cocos2d::EventCustom *event)
     if (info.userId == info.myUserId) {
         drawBowing = false;
         loosed = true;
+        
+        int curveId = actorLayer->getMe()->getCurveId();
+        if (curveId != 0) {
+            curveLayer->looseBow(event);
+        }
     }
+    actorLayer->looseBow(event);
 }
 
 float GameScene::convertDrawAngle(float angle)

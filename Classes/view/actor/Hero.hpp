@@ -27,12 +27,12 @@ public:
     void changeActionWithName(int nextAction);
     void doFlag(int nextFlag);
     
-    void initGun();
-    void refreshCurve();
-    void refreshArrow();
-    
-    float calcDurByDis(float distance);
-    void calcControlPos();
+//    void initGun();
+//    void refreshCurve();
+//    void refreshArrow();
+//    
+//    float calcDurByDis(float distance);
+//    void calcControlPos();
     
     void drawBow(float emitAngle, float velocity);
     void loose();
@@ -79,6 +79,7 @@ private:
     float currDur;
     
     CC_SYNTHESIZE(bool, flipX, FlipX);
+    CC_SYNTHESIZE(int, curveId, CurveId);
 };
 
 #endif /* Hero_hpp */

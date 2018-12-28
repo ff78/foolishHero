@@ -16,9 +16,18 @@ public:
     void onEnter();
     void onExit();
     
-    void setup();
-    void drawBow(float angle, float velocity);
+    void setStartpos(float x, float y, int curveId);
+    void drawBow(float emitAngle, float velocity);
+    void loose();
     void clearCurve();
+    
+    void refreshCurve();
+    void refreshArrow();
+    
+    float calcDurByDis(float distance);
+    void calcControlPos();
+    
+    void update(float dt);
     
     CREATE_FUNC(SpearCurve);
 private:

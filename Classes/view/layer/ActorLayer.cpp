@@ -16,14 +16,11 @@ ActorLayer::ActorLayer()
 {
     setupHeroListener = EventListenerCustom::create(SETUP_HERO, CC_CALLBACK_1(ActorLayer::setupFoo, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(setupHeroListener, -1);
-    looseListener = EventListenerCustom::create(LOOSE_ARROW, CC_CALLBACK_1(ActorLayer::looseBow, this));
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(looseListener, -1);
 }
 
 ActorLayer::~ActorLayer()
 {
     Director::getInstance()->getEventDispatcher()->removeEventListener(setupHeroListener);
-    Director::getInstance()->getEventDispatcher()->removeEventListener(looseListener);
 }
 
 bool ActorLayer::init()
@@ -70,7 +67,7 @@ void ActorLayer::setupFoo(cocos2d::EventCustom *event)
         }
     }
 
-    me->initGun();
+//    me->initGun();
 }
 
 void ActorLayer::adjustBow(float angle, float power)
