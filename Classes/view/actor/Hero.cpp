@@ -77,7 +77,7 @@ void Hero::drawBow(float emitAngle, float velocity)
     
 }
 
-void Hero::loose()
+void Hero::loose(float emitAngle, float velocity)
 {
 
 }

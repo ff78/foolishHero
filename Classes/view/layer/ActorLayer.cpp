@@ -66,8 +66,6 @@ void ActorLayer::setupFoo(cocos2d::EventCustom *event)
             addChild(master);
         }
     }
-
-//    me->initGun();
 }
 
 void ActorLayer::adjustBow(float angle, float power)
@@ -79,7 +77,6 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
 {
     L2E_LOOSE data = *static_cast<L2E_LOOSE *>(event->getUserData());
     if (data.userId == data.myUserId) {
-        me->loose();
         float angle = data.drawAngle;
         if (me->getFlipX()) {
             angle = 180-data.drawAngle;
@@ -87,6 +84,7 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
                 angle -= 360;
             }
         }
+        me->loose(angle, data.drawPower);
     }else{
         float angle = data.drawAngle;
         if (!master->getFlipX()) {
@@ -95,6 +93,7 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
                 angle -= 360;
             }
         }
+        master->loose(angle, data.drawPower);
     }
 }
 

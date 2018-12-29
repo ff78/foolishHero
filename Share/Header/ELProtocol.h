@@ -29,8 +29,7 @@ enum L2EProtocol
     l2e_setup_foo,                                      //  设置玩家位置
     l2e_draw_bow,                                       //  拉开弓
     l2e_loose,                                          //  放箭
-    
-    l2e_setup_gun,                                      //  创建发射点
+
     l2e_max
 };
 
@@ -60,6 +59,9 @@ typedef struct __E2L_LOOSE
     E2LProtocol                 eProtocol;
     float                       drawAngle;
     float                       drawPower;
+    cocos2d::Vec2               startPos;
+    cocos2d::Vec2               controlPos;
+    cocos2d::Vec2               endPos;
 }E2L_LOOSE;
 
 typedef struct __L2E_DRAW_A_BOW
@@ -80,16 +82,6 @@ typedef struct __L2E_LOOSE
     float                       drawPower;
 }L2E_LOOSE;
 
-typedef struct __L2E_SETUP_GUN
-{
-    L2EProtocol                 eProtocol;
-    int                         speed;
-    float                       angle;
-    float                       emitPosX;
-    float                       emitPosY;
-    
-    bool                        isFlip;
-}L2E_SETUP_GUN;
 
 typedef struct __L2E_COMMON
 {

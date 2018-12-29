@@ -20,7 +20,6 @@ UIManager::UIManager()
     m_Logic2EngineFunc[l2e_setup_foo] = &UIManager::setupFoo;
     m_Logic2EngineFunc[l2e_loose] = &UIManager::loose;
     m_Logic2EngineFunc[l2e_draw_bow] = &UIManager::drawABow;
-//    m_Logic2EngineFunc[l2e_setup_gun] = &UIManager::setupGun;
 }
 
 void UIManager::loop(float dt)

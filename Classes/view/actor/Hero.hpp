@@ -35,7 +35,7 @@ public:
 //    void calcControlPos();
     
     void drawBow(float emitAngle, float velocity);
-    void loose();
+    void loose(float emitAngle, float velocity);
 
     CREATE_FUNC(Hero);
     
