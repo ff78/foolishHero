@@ -10,6 +10,7 @@
 
 #include "cocos2d.h"
 #include "../actor/Hero.hpp"
+#include "../actor/Spear.hpp"
 
 class ActorLayer: public cocos2d::Layer {
     
@@ -24,12 +25,15 @@ public:
     void setupFoo(cocos2d::EventCustom *event);
     void looseBow(cocos2d::EventCustom *event);
     void adjustBow(float angle, float power);
+    void drawBow(float angle, float power);
     void testLoose(float dt);
+    
+    void update(float dt);
     
     CREATE_FUNC(ActorLayer);
     
 private:
-    
+    std::vector<Spear *> spearVec;
     cocos2d::EventListenerCustom *setupHeroListener;
     
     CC_SYNTHESIZE_READONLY(Hero *, me, Me);

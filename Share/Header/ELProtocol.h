@@ -17,6 +17,8 @@ enum E2LProtocol
     e2l_shown_battle,                                   //  已显示战场
     e2l_draw_bow,                                       //  拉开弓
     e2l_loose,                                          //  放箭
+    
+    e2l_hit_hero,                                       //  击中
     e2l_max
 };
 
@@ -29,6 +31,8 @@ enum L2EProtocol
     l2e_setup_foo,                                      //  设置玩家位置
     l2e_draw_bow,                                       //  拉开弓
     l2e_loose,                                          //  放箭
+    
+    l2e_hit_hero,                                       //  击中
 
     l2e_max
 };
@@ -43,8 +47,6 @@ typedef struct __L2E_SETUP_FOO
     bool                        flipX;
     
     int                         myUserId;
-    
-    
 }L2E_SETUP_FOO;
 
 typedef struct __E2L_DRAW_A_BOW
@@ -96,4 +98,26 @@ typedef struct __L2E_UPDATE_LOAD
     int                         step;
     int                         count;
 }L2E_UPDATE_LOAD;
+
+typedef struct __E2L_HIT_HERO
+{
+    E2LProtocol                 eProtocol;
+    int                         hitUserId;
+    int                         hurtBone;
+    float                       arrowAngle;
+    float                       arrowPosX;
+    float                       arrowPosY;
+}E2L_HIT_HERO;
+
+typedef struct __L2E_HIT_HERO
+{
+    L2EProtocol                 eProtocol;
+    int                         hitUserId;
+    int                         hurtBone;
+    float                       arrowAngle;
+    float                       arrowPosX;
+    float                       arrowPosY;
+    int                         hurtValue;
+    int                         critType;
+}L2E_HIT_HERO;
 #endif /* ELProtocol_h */

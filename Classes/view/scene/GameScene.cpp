@@ -97,6 +97,7 @@ void GameScene::drawBow(cocos2d::EventCustom *event)
         
         curveLayer->createCurve(actorLayer->getMe()->getPositionX(), actorLayer->getMe()->getPositionY());
         actorLayer->getMe()->setCurveId(curveLayer->getMaxCurveId());
+        actorLayer->drawBow(info.drawAngle, info.drawPower);
     }
     
 }

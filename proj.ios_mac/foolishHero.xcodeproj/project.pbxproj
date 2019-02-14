@@ -37,6 +37,15 @@
 		521A8EA919F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
+		707125432212A95A00B003C2 /* spineboy.png in Resources */ = {isa = PBXBuildFile; fileRef = 7071253F2212A95A00B003C2 /* spineboy.png */; };
+		707125442212A95A00B003C2 /* spineboy-pro.json in Resources */ = {isa = PBXBuildFile; fileRef = 707125412212A95A00B003C2 /* spineboy-pro.json */; };
+		707125452212A95A00B003C2 /* spineboy.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 707125422212A95A00B003C2 /* spineboy.atlas */; };
+		70877ABF21FD523500C4DF4A /* Comet.plist in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABA21FD523500C4DF4A /* Comet.plist */; };
+		70877AC021FD523500C4DF4A /* 25.png in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABB21FD523500C4DF4A /* 25.png */; };
+		70877AC121FD523500C4DF4A /* testAnimationResource in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABC21FD523500C4DF4A /* testAnimationResource */; };
+		70877AC221FD523500C4DF4A /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABD21FD523500C4DF4A /* 01.png */; };
+		70877AC321FD523500C4DF4A /* DemoPlayer.csb in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABE21FD523500C4DF4A /* DemoPlayer.csb */; };
+		70877AC621FDB7D200C4DF4A /* MathAide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70877AC421FDB7D200C4DF4A /* MathAide.cpp */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -152,6 +161,16 @@
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		7071253F2212A95A00B003C2 /* spineboy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spineboy.png; sourceTree = "<group>"; };
+		707125412212A95A00B003C2 /* spineboy-pro.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "spineboy-pro.json"; sourceTree = "<group>"; };
+		707125422212A95A00B003C2 /* spineboy.atlas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spineboy.atlas; sourceTree = "<group>"; };
+		70877ABA21FD523500C4DF4A /* Comet.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Comet.plist; sourceTree = "<group>"; };
+		70877ABB21FD523500C4DF4A /* 25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 25.png; sourceTree = "<group>"; };
+		70877ABC21FD523500C4DF4A /* testAnimationResource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testAnimationResource; sourceTree = "<group>"; };
+		70877ABD21FD523500C4DF4A /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
+		70877ABE21FD523500C4DF4A /* DemoPlayer.csb */ = {isa = PBXFileReference; lastKnownFileType = file; path = DemoPlayer.csb; sourceTree = "<group>"; };
+		70877AC421FDB7D200C4DF4A /* MathAide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathAide.cpp; sourceTree = "<group>"; };
+		70877AC521FDB7D200C4DF4A /* MathAide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathAide.h; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -360,6 +379,14 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				707125412212A95A00B003C2 /* spineboy-pro.json */,
+				707125422212A95A00B003C2 /* spineboy.atlas */,
+				7071253F2212A95A00B003C2 /* spineboy.png */,
+				70877ABD21FD523500C4DF4A /* 01.png */,
+				70877ABB21FD523500C4DF4A /* 25.png */,
+				70877ABA21FD523500C4DF4A /* Comet.plist */,
+				70877ABE21FD523500C4DF4A /* DemoPlayer.csb */,
+				70877ABC21FD523500C4DF4A /* testAnimationResource */,
 				FA69647F21D1FD6D00D4ECC6 /* baobingjianbody.png */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
@@ -435,6 +462,8 @@
 		FA30234621BE042E00762A05 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				70877AC421FDB7D200C4DF4A /* MathAide.cpp */,
+				70877AC521FDB7D200C4DF4A /* MathAide.h */,
 				FA30235721BE06BD00762A05 /* crypt */,
 				FA30236921BE06BD00762A05 /* GameReader.cpp */,
 				FA30237D21BE06BE00762A05 /* GameReader.h */,
@@ -620,7 +649,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 3K9YGJDGD8;
+						DevelopmentTeam = ZLPB5CW9KN;
 					};
 				};
 			};
@@ -679,11 +708,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70877AC221FD523500C4DF4A /* 01.png in Resources */,
+				70877AC121FD523500C4DF4A /* testAnimationResource in Resources */,
+				70877AC021FD523500C4DF4A /* 25.png in Resources */,
 				FA69648121D1FD6D00D4ECC6 /* baobingjianbody.png in Resources */,
 				1A88B2641FC3D9C9005C14AE /* Images.xcassets in Resources */,
+				707125442212A95A00B003C2 /* spineboy-pro.json in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
+				70877AC321FD523500C4DF4A /* DemoPlayer.csb in Resources */,
+				707125452212A95A00B003C2 /* spineboy.atlas in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
+				707125432212A95A00B003C2 /* spineboy.png in Resources */,
 				1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */,
+				70877ABF21FD523500C4DF4A /* Comet.plist in Resources */,
 				1AF87B881F6F781D007BE51C /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,6 +769,7 @@
 				FA30238421BE06BF00762A05 /* coBase64.cpp in Sources */,
 				FA30238521BE06BF00762A05 /* coMD5.cpp in Sources */,
 				FA30238D21BE06BF00762A05 /* ShardeEffectNone.cpp in Sources */,
+				70877AC621FDB7D200C4DF4A /* MathAide.cpp in Sources */,
 				FA30238F21BE06BF00762A05 /* ShardeSprite.cpp in Sources */,
 				FA30238821BE06BF00762A05 /* GameReader.cpp in Sources */,
 				FA30239121BE06BF00762A05 /* StringData.cpp in Sources */,
@@ -776,7 +814,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = 3K9YGJDGD8;
+				DEVELOPMENT_TEAM = ZLPB5CW9KN;
 				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -811,7 +849,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = 3K9YGJDGD8;
+				DEVELOPMENT_TEAM = ZLPB5CW9KN;
 				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -44,6 +44,7 @@ public:
     
     void drawMyBow(E2L_DRAW_A_BOW data);
     void looseMyArrow(E2L_LOOSE data);
+    void hitHero(E2L_HIT_HERO data);
     
     float convertDrawAngle(float angle);
 protected:

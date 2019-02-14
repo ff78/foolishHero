@@ -63,6 +63,7 @@ private:
 
     void BattleDrawBow(void *pMsg);
     void BattleLoose(void *pMsg);
+    void BattleHitHero(void *pMsg);
     
     void test();
 private:

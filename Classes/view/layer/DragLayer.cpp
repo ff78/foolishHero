@@ -136,7 +136,7 @@ void DragLayer::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void DragLayer::drawABow()
 {
-    log("拉开弓    角度:%f,  长度:%f", dragAngle, dragDistance);
+//    log("拉开弓    角度:%f,  长度:%f", dragAngle, dragDistance);
     E2L_DRAW_A_BOW info;
     info.eProtocol = e2l_draw_bow;
     info.drawAngle = dragAngle;
@@ -146,7 +146,7 @@ void DragLayer::drawABow()
 
 void DragLayer::loose()
 {
-    log("放箭    角度:%f,  长度:%f", dragAngle, dragDistance);
+//    log("放箭    角度:%f,  长度:%f", dragAngle, dragDistance);
     bowString->clear();
     
     E2L_LOOSE info;

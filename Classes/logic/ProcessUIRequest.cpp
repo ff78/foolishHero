@@ -41,3 +41,9 @@ void ClientLogic::BattleLoose(void *pMsg)
     E2L_LOOSE *pMsgInfo = (E2L_LOOSE *)pMsg;
     GameCore::instance()->looseMyArrow(*pMsgInfo);
 }
+
+void ClientLogic::BattleHitHero(void *pMsg)
+{
+    E2L_HIT_HERO *pMsgInfo = (E2L_HIT_HERO *)pMsg;
+    GameCore::instance()->hitHero(*pMsgInfo);
+}
