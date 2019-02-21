@@ -240,7 +240,7 @@ void Hero::setupView(std::string res)
 //        log("walked!");
 //    });
     
-    skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
+//    skeletonNode->setPosition(Vec2(_contentSize.width / 2, 0));
     skeletonNode->setScaleX(flipX?-1:1);
     addChild(skeletonNode);
     
@@ -279,4 +279,83 @@ int Hero::hitCheck(Vec2 arrowCenter, float angle, Size arrowSize)
         return 1;
     }
     return 0;
+}
+
+Vec2 Hero::getHitPos(Vec2 arrowPos, int hurtBone)
+{
+    switch(hurtBone)
+    {
+        case 0:
+            return Vec2::ZERO;
+        case 1:
+        {
+            auto bodyY = arrowPos.y;
+            auto bodyX = arrowPos.x;
+            auto head = skeletonNode->findBone("head");
+            
+            auto headX = head->worldX;
+            auto headY = head->worldY;
+            auto posX = bodyX-headX;
+            auto posY = bodyY-headY;
+            auto pos = Vec2(posX, posY);
+            pos.rotate(Vec2::ZERO, CC_DEGREES_TO_RADIANS(-head->rotation));
+            return pos;
+        }
+            break;
+    }
+    
+    return Vec2::ZERO;
+}
+
+float Hero::getHitAngle(float arrowAngle, int hurtBone)
+{
+    switch (hurtBone) {
+        case 0:
+            return 0;
+        case 1:
+        {
+            auto head = skeletonNode->findBone("head");
+            return arrowAngle - head->rotation;
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void Hero::hitBySpear(L2E_HIT_HERO data)
+{
+    if (data.hitUserId != userId) {
+        return;
+    }
+    
+    switch(data.hurtBone)
+    {
+        case 0:
+            return;
+        case 1:
+        {
+            auto bodyY = data.arrowPosY;
+            auto bodyX = data.arrowPosX;
+//            auto head = skeletonNode->findBone("head");
+//            auto angle = data.arrowAngle - head->rotation;
+//            auto headX = head->worldX;
+//            auto headY = head->worldY;
+//            auto headSlot = skeletonNode->findSlot("head");
+//            auto posX = bodyX-headX;
+//            auto posY = bodyY-headY;
+            auto target = skeletonNode->getNodeForSlot("head");
+            auto spear = Sprite::create("baobingjianbody.png");
+            auto pos = Vec2(bodyX, bodyY);
+//            pos.rotate(Vec2::ZERO, CC_DEGREES_TO_RADIANS(-head->rotation));
+            spear->setPosition(pos);
+            spear->setRotation(-data.arrowAngle);
+//            spear->setLocalZOrder(-10);
+            target->addChild(spear);
+            target->setLocalZOrder(-10);
+            
+        }
+            break;
+    }
 }

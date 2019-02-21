@@ -24,18 +24,22 @@ public:
     
     void setupFoo(cocos2d::EventCustom *event);
     void looseBow(cocos2d::EventCustom *event);
+    void hitHero(cocos2d::EventCustom *event);
     void adjustBow(float angle, float power);
     void drawBow(float angle, float power);
     void testLoose(float dt);
     
     void update(float dt);
-    
+    float convertHitPos(float arrowPosX, Hero *hero);
+    float convertArrowAngle(float arrowAngle, Hero *hero);
     CREATE_FUNC(ActorLayer);
     
 private:
-    std::vector<Spear *> spearVec;
+    std::map<int, Spear *> spearMap;
     cocos2d::EventListenerCustom *setupHeroListener;
+    cocos2d::EventListenerCustom *hitHeroListener;
     
+    CC_SYNTHESIZE_READONLY(int, maxArrowId, MaxArrowId);
     CC_SYNTHESIZE_READONLY(Hero *, me, Me);
     CC_SYNTHESIZE_READONLY(Hero *, master, Master);
 };

@@ -40,6 +40,7 @@ typedef struct __CREATE_BULLET_DATA
 #define SETUP_HERO                                      "SETUP_HERO"
 #define DRAW_BOW                                        "DRAW_BOW"
 #define LOOSE_ARROW                                     "LOOSE_ARROW"
+#define HIT_HERO                                        "HIT_HERO"
 
 
 #endif /* EventDefine_h */

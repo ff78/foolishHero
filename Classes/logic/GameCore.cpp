@@ -176,13 +176,14 @@ void GameCore::looseMyArrow(E2L_LOOSE data)
 
 void GameCore::hitHero(E2L_HIT_HERO data)
 {
-    float sendAngle = convertDrawAngle(data.arrowAngle);
+//    float sendAngle = convertDrawAngle(data.arrowAngle);
     //此处应改为向服务器发送，再等待服务器广播
     L2E_HIT_HERO info;
     info.eProtocol = l2e_hit_hero;
     info.hitUserId = data.hitUserId;
     info.hurtBone = data.hurtBone;
-    info.arrowAngle = sendAngle;
+    info.arrowId = data.arrowId;
+    info.arrowAngle = data.arrowAngle;
     info.arrowPosX = data.arrowPosX;
     info.arrowPosY = data.arrowPosY;
     info.hurtValue = 153;

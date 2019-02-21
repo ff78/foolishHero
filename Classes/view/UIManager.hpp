@@ -25,7 +25,7 @@ public:
     void setupFoo(void *pMsg);
     void drawABow(void *pMsg);
     void loose(void *pMsg);
-    
+    void hitHero(void *pMsg);
     
     void loop(float dt);
 };

@@ -104,6 +104,7 @@ typedef struct __E2L_HIT_HERO
     E2LProtocol                 eProtocol;
     int                         hitUserId;
     int                         hurtBone;
+    int                         arrowId;
     float                       arrowAngle;
     float                       arrowPosX;
     float                       arrowPosY;
@@ -114,6 +115,7 @@ typedef struct __L2E_HIT_HERO
     L2EProtocol                 eProtocol;
     int                         hitUserId;
     int                         hurtBone;
+    int                         arrowId;
     float                       arrowAngle;
     float                       arrowPosX;
     float                       arrowPosY;

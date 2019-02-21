@@ -17,6 +17,7 @@ Spear::Spear()
     originState = SPEAR_MAX;
     lastState = SPEAR_MAX;
     spearAngle = 0;
+    arrowId = -1;
     alive = true;
 }
 
@@ -152,6 +153,15 @@ void Spear::enterState(SPEAR_STATES nextState)
             runAction(seq);
         }
             break;
+        case SPEAR_INTERUPT:
+        {
+            alive = false;
+            spt->setVisible(false);
+            bezierT = 0;
+            currDur = 0;
+            unscheduleUpdate();
+        }
+            break;
         default:
             break;
     }
@@ -232,10 +242,10 @@ void Spear::refreshArrow()
     arrowHeadPos.x = (1-bezierT) * controlPos.x + bezierT * endPos.x;
     arrowHeadPos.y = (1-bezierT) * controlPos.y + bezierT * endPos.y;
     
-    Vec2 arrowNor = (arrowTailPos-arrowHeadPos).getNormalized();
+    Vec2 arrowNor = (arrowHeadPos-arrowTailPos).getNormalized();
     spearAngle = CC_RADIANS_TO_DEGREES(arrowNor.getAngle());
 //    log("刷新角度 angle:%f", spearAngle);
-    spt->setRotation(180-spearAngle);
+    spt->setRotation(-spearAngle);
     
 }
 

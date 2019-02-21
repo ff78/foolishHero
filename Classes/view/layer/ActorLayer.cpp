@@ -17,11 +17,14 @@ ActorLayer::ActorLayer()
 {
     setupHeroListener = EventListenerCustom::create(SETUP_HERO, CC_CALLBACK_1(ActorLayer::setupFoo, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(setupHeroListener, -1);
+    hitHeroListener = EventListenerCustom::create(HIT_HERO, CC_CALLBACK_1(ActorLayer::hitHero, this));
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(hitHeroListener, -1);
 }
 
 ActorLayer::~ActorLayer()
 {
     Director::getInstance()->getEventDispatcher()->removeEventListener(setupHeroListener);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(hitHeroListener);
 }
 
 bool ActorLayer::init()
@@ -30,6 +33,7 @@ bool ActorLayer::init()
         return false;
     }
     
+    maxArrowId = 1;
     return true;
 }
 
@@ -43,6 +47,7 @@ void ActorLayer::onEnter()
 void ActorLayer::onExit()
 {
     Layer::onExit();
+    spearMap.clear();
     unscheduleUpdate();
 }
 
@@ -52,6 +57,7 @@ void ActorLayer::setupFoo(cocos2d::EventCustom *event)
     for (int i = 0; i < 2; i++) {
         if(data.userId[i] == data.myUserId) {
             me = Hero::create();
+            //  翻译坐标
             float posx = GameUtils::winSize.width/2 - data.posx[i];
             if (data.flipX) {
                 posx = GameUtils::winSize.width/2 + data.posx[i];
@@ -63,6 +69,7 @@ void ActorLayer::setupFoo(cocos2d::EventCustom *event)
             addChild(me);
         }else {
             master = Hero::create();
+            //  翻译坐标
             float posx = GameUtils::winSize.width/2 + data.posx[i];
             if (data.flipX) {
                 posx = GameUtils::winSize.width/2 - data.posx[i];
@@ -86,10 +93,31 @@ void ActorLayer::drawBow(float angle, float power)
     me->drawBow(angle, power);
 }
 
+void ActorLayer::hitHero(cocos2d::EventCustom *event)
+{
+    L2E_HIT_HERO data = *static_cast<L2E_HIT_HERO*>(event->getUserData());
+    //  找到被击中者，把箭支插到骨骼上
+    if (data.hitUserId == me->getUserId()) {
+        me->hitBySpear(data);
+    } else if (data.hitUserId == master->getUserId()) {
+        master->hitBySpear(data);
+    }
+    //  把箭支设为打断飞行状态，消除它
+    if (spearMap.find(data.arrowId) != spearMap.end()) {
+        auto arrow = spearMap[data.arrowId];
+        if (arrow->getAlive() && arrow->getCurrState() == SPEAR_FLY) {
+            arrow->changeState(SPEAR_INTERUPT);
+        }
+    }
+}
+
 void ActorLayer::looseBow(cocos2d::EventCustom *event)
 {
     L2E_LOOSE data = *static_cast<L2E_LOOSE *>(event->getUserData());
     auto spear = Spear::create();
+    //  给发出的箭支唯一ID
+    spear->setArrowId(maxArrowId);
+    
     if (data.userId == data.myUserId) {
         float angle = data.drawAngle;
         if (me->getFlipX()) {
@@ -116,7 +144,8 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
         spear->setupWithData(data, master->getFlipX(), master->getPosition());
     }
     
-    spearVec.push_back(spear);
+    spearMap[maxArrowId] = spear;
+    maxArrowId++;
 }
 
 void ActorLayer::testLoose(float dt)
@@ -126,17 +155,20 @@ void ActorLayer::testLoose(float dt)
 
 void ActorLayer::update(float dt)
 {
-    for (auto iter = spearVec.begin(); iter != spearVec.end(); ) {
-        if (!(*iter)->getAlive()) {
-            removeChild((*iter));
-            iter = spearVec.erase(iter);
+    // 先把无效箭支删除
+    for (auto iter = spearMap.begin(); iter != spearMap.end(); ) {
+        if (!(*iter).second->getAlive()) {
+            removeChild((*iter).second);
+            iter = spearMap.erase(iter);
             
         }else{
             iter++;
         }
     }
 
-    for (auto arrow : spearVec) {
+    //  箭支的遍历碰撞
+    for (auto iter : spearMap) {
+        auto arrow = iter.second;
         if (arrow->getCurrState() != SPEAR_FLY) {
             continue;
         }
@@ -146,7 +178,7 @@ void ActorLayer::update(float dt)
 
         if (arrow->getOwnerId() == me->getUserId())
         {
-            int hitResult = master->hitCheck(arrowPos, 180-arrowAngle, Size(93, 15));
+            int hitResult = master->hitCheck(arrowPos, arrowAngle, Size(70, 8));//93,15
             switch(hitResult)
             {
                 case 0:
@@ -157,9 +189,18 @@ void ActorLayer::update(float dt)
                     info.eProtocol = e2l_hit_hero;
                     info.hitUserId = master->getUserId();
                     info.hurtBone = 1;
-                    info.arrowAngle = arrowAngle;
-                    info.arrowPosX = arrowPos.x;
-                    info.arrowPosY = arrowPos.y;
+                    info.arrowId = arrow->getArrowId();
+                    //  转换成无翻转的箭支角度
+                    info.arrowAngle = convertArrowAngle(arrowAngle, master);
+                    //  转换成相对命中骨骼的角度
+                    info.arrowAngle = master->getHitAngle(info.arrowAngle, info.hurtBone);
+                    //  转换成无翻转的相对角色的坐标
+                    info.arrowPosX = convertHitPos(arrowPos.x, master);
+                    info.arrowPosY = arrowPos.y - master->getPositionY();
+                    //  转换成相对骨骼的坐标位置
+                    auto pos = master->getHitPos(Vec2(info.arrowPosX, info.arrowPosY), info.hurtBone);
+                    info.arrowPosX = pos.x;
+                    info.arrowPosY = pos.y;
                     ClientLogic::instance()->ProcessUIRequest(&info);
                 }
                     break;
@@ -176,13 +217,46 @@ void ActorLayer::update(float dt)
                     info.eProtocol = e2l_hit_hero;
                     info.hitUserId = master->getUserId();
                     info.hurtBone = 1;
-                    info.arrowAngle = arrowAngle;
-                    info.arrowPosX = arrowPos.x;
-                    info.arrowPosY = arrowPos.y;
+                    info.arrowId = arrow->getArrowId();
+                    //  转换成无翻转的箭支角度
+                    info.arrowAngle = convertArrowAngle(arrowAngle, me);
+                    //  转换成相对命中骨骼的角度
+                    info.arrowAngle = me->getHitAngle(info.arrowAngle, info.hurtBone);
+                    //  转换成无翻转的相对角色的坐标
+                    info.arrowPosX = convertHitPos(arrowPos.x, me);
+                    info.arrowPosY = arrowPos.y - me->getPositionY();
+                    //  转换成相对骨骼的坐标位置
+                    auto pos = me->getHitPos(Vec2(info.arrowPosX, info.arrowPosY), info.hurtBone);
+                    info.arrowPosX = pos.x;
+                    info.arrowPosY = pos.y;
                     ClientLogic::instance()->ProcessUIRequest(&info);
                 }
                     break;
             }
         }
+    }
+}
+
+float ActorLayer::convertArrowAngle(float arrowAngle, Hero *hero)
+{
+    float sendAngle = arrowAngle;
+
+    if (hero->getFlipX()) {
+        if (sendAngle >= 0) {
+            sendAngle = 180 - arrowAngle;
+        }else{
+            sendAngle = -180 - arrowAngle;
+        }
+    }
+    
+    return sendAngle;
+}
+
+float ActorLayer::convertHitPos(float arrowPosX, Hero *hero)
+{
+    if (hero->getFlipX()) {
+        return hero->getPositionX() - arrowPosX;
+    } else {
+        return arrowPosX - hero->getPositionX();
     }
 }

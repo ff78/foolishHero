@@ -13,6 +13,7 @@
 #include "cocostudio/CocoStudio.h"
 #include <spine/spine-cocos2dx.h>
 #include "spine/spine.h"
+#include "ELProtocol.h"
 
 enum HERO_STATES
 {
@@ -49,6 +50,9 @@ public:
     void endLoose(spTrackEntry *entry);
     
     int hitCheck(cocos2d::Vec2 arrowCenter, float angle, cocos2d::Size arrowSize);
+    cocos2d::Vec2 getHitPos(cocos2d::Vec2 arrowPos, int hurtBone);
+    float getHitAngle(float arrowAngle, int hurtBone);
+    void hitBySpear(L2E_HIT_HERO data);
 
     CREATE_FUNC(Hero);
     

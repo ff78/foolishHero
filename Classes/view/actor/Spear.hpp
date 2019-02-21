@@ -18,6 +18,7 @@ enum SPEAR_STATES
     SPEAR_DRAW = 1,
     SPEAR_FLY = 2,
     SPEAR_STAB = 3,
+    SPEAR_INTERUPT = 4,
     SPEAR_MAX,
 };
 
@@ -74,6 +75,7 @@ private:
     
     CC_SYNTHESIZE_READONLY(float, alive, Alive);
     CC_SYNTHESIZE(int, ownerId, OwnerId);
+    CC_SYNTHESIZE(int, arrowId, ArrowId);
     CC_SYNTHESIZE_READONLY(cocos2d::Vec2, arrowPos, ArrowPos);
     CC_SYNTHESIZE_READONLY(float, spearAngle, SpearAngle);
     CC_SYNTHESIZE_READONLY(SPEAR_STATES, currState, CurrState);

@@ -20,6 +20,8 @@ UIManager::UIManager()
     m_Logic2EngineFunc[l2e_setup_foo] = &UIManager::setupFoo;
     m_Logic2EngineFunc[l2e_loose] = &UIManager::loose;
     m_Logic2EngineFunc[l2e_draw_bow] = &UIManager::drawABow;
+    m_Logic2EngineFunc[l2e_hit_hero] = &UIManager::hitHero;
+    
 }
 
 void UIManager::loop(float dt)
@@ -76,6 +78,13 @@ void UIManager::drawABow(void *pMsg)
 void UIManager::loose(void *pMsg)
 {
     EventCustom event(LOOSE_ARROW);
+    event.setUserData(pMsg);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+}
+
+void UIManager::hitHero(void *pMsg)
+{
+    EventCustom event(HIT_HERO);
     event.setUserData(pMsg);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
