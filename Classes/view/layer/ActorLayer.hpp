@@ -32,6 +32,7 @@ public:
     void update(float dt);
     float convertHitPos(float arrowPosX, Hero *hero);
     float convertArrowAngle(float arrowAngle, Hero *hero);
+//    float power2Velocity(float power);
     CREATE_FUNC(ActorLayer);
     
 private:

@@ -595,8 +595,8 @@
 				FA3023A721BE163800762A05 /* Hero.hpp */,
 				FA3023A921BE164B00762A05 /* Spear.cpp */,
 				FA3023AA21BE164B00762A05 /* Spear.hpp */,
-				FA22A2EF21D3321300ACE9C3 /* SpearCurve.cpp */,
 				FA22A2F021D3321300ACE9C3 /* SpearCurve.hpp */,
+				FA22A2EF21D3321300ACE9C3 /* SpearCurve.cpp */,
 			);
 			path = actor;
 			sourceTree = "<group>";

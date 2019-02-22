@@ -24,6 +24,7 @@ originHeadAngle(0)
     originState = MAX;
     lastState = MAX;
     headRect = Rect::ZERO;
+    showSpearCountDown.clear();
 }
 
 Hero::~Hero()
@@ -31,6 +32,7 @@ Hero::~Hero()
     currState = MAX;
     originState = MAX;
     lastState = MAX;
+    showSpearCountDown.clear();
 }
 
 bool Hero::init()
@@ -57,13 +59,14 @@ void Hero::updateState()
 void Hero::update(float dt)
 {
     getHeadBB();
+    countDownSpear(dt);
 }
 
 void Hero::changeState(HERO_STATES nextState)
 {
     if(currState == nextState)
         return;
-    log("change hero state from %d to %d", currState, nextState);
+//    log("change hero state from %d to %d", currState, nextState);
     exitState(currState);
     lastState    = currState;
     currState    = nextState;
@@ -81,17 +84,13 @@ void Hero::enterState(HERO_STATES nextState)
             skeletonNode->setAnimation(0, "hoverboard", true);
             skeletonNode->addAnimation(0, "walk", false, 1);
             skeletonNode->addAnimation(0, "idle", true);
-//            playerAction->play("stand", true);
         }
             break;
             
         case DRAW:
         {
-//            playerAction->play("walk", false);
-//            skeletonNode->setMix("idle", "aim", 0.4);
             originHeadAngle = skeletonNode->findBone("head")->data->rotation;
             originArmAngle = skeletonNode->findBone("rear-upper-arm")->data->rotation;
-//            skeletonNode->setEmptyAnimation(0, 0.4);
             skeletonNode->setAnimation(0, "idle", true);
         }
             break;
@@ -100,12 +99,8 @@ void Hero::enterState(HERO_STATES nextState)
         {
             originHeadAngle = skeletonNode->findBone("head")->data->rotation;
             originArmAngle = skeletonNode->findBone("rear-upper-arm")->data->rotation;
-//            skeletonNode->setEmptyAnimation(0, 0);
-//            skeletonNode->setMix("idle", "shoot", 0.1);
             spTrackEntry *shootTrack = skeletonNode->setAnimation(1, "shoot", false);
             skeletonNode->setTrackCompleteListener(shootTrack, CC_CALLBACK_1(Hero::endLoose, this));
-            //            playerAction->play("walk_fire", false);
-            //            playerAction->setAnimationEndCallFunc("walk_fire", CC_CALLBACK_0(Hero::back2Stand, this));
         }
             break;
             
@@ -182,27 +177,6 @@ void Hero::loose(float emitAngle, float velocity)
 
 void Hero::setupView(std::string res)
 {
-//    player = CSLoader::createNode(res.c_str());
-//    playerAction = CSLoader::createTimeline(res.c_str());
-//    addChild(player);
-//    player->setScale(0.2);
-//    player->runAction(playerAction);
-//
-//    auto body = player->getChildByName("Layer15");
-//    auto head = body->getChildByName("Layer14");
-//    auto arrow = Sprite::create("baobingjianbody.png");
-//    arrow->setLocalZOrder(-1);
-//    arrow->setScale(10);
-//    head->addChild(arrow);
-//    auto sum = body->getRotation();
-//    sum += head->getRotation();
-//    float arrowAngle = 20;
-//    arrow->setRotation(-sum-arrowAngle);
-//
-//    player->setScaleX(flipX?0.2:-0.2);
-    
-
-    
 //    //获得数据
 //    spAtlas* _atlas = spAtlas_createFromFile("spineboy.atlas", 0);
 //    spSkeletonJson* _json = spSkeletonJson_create(_atlas);
@@ -211,36 +185,26 @@ void Hero::setupView(std::string res)
 //    skeletonNode = SkeletonAnimation::createWithData(spData);
     skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.2);
     
-    skeletonNode->setStartListener( [] (spTrackEntry* entry) {
-        log("%d start: %s", entry->trackIndex, entry->animation->name);
-    });
-    skeletonNode->setInterruptListener( [] (spTrackEntry* entry) {
-        log("%d interrupt", entry->trackIndex);
-    });
-    skeletonNode->setEndListener( [] (spTrackEntry* entry) {
-        log("%d end", entry->trackIndex);
-    });
-    skeletonNode->setCompleteListener( [] (spTrackEntry* entry) {
-        log("%d complete", entry->trackIndex);
-    });
-    skeletonNode->setDisposeListener( [] (spTrackEntry* entry) {
-        log("%d dispose", entry->trackIndex);
-    });
-    skeletonNode->setEventListener( [] (spTrackEntry* entry, spEvent* event) {
-        log("%d event: %s, %d, %f, %s", entry->trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
-    });
-    
-//    skeletonNode->setMix("idle", "walk", 0.4);
-//    skeletonNode->setMix("walk", "hoverboard", 0.4);
-//    skeletonNode->setAnimation(0, "idle", true);
-//    spTrackEntry* walkEntry = skeletonNode->addAnimation(0, "walk", false, 1);
-//    skeletonNode->addAnimation(0, "hoverboard", true);
-//
-//    skeletonNode->setTrackStartListener(walkEntry, [] (spTrackEntry* entry) {
-//        log("walked!");
+//    skeletonNode->setStartListener( [] (spTrackEntry* entry) {
+//        log("%d start: %s", entry->trackIndex, entry->animation->name);
 //    });
+//    skeletonNode->setInterruptListener( [] (spTrackEntry* entry) {
+//        log("%d interrupt", entry->trackIndex);
+//    });
+//    skeletonNode->setEndListener( [] (spTrackEntry* entry) {
+//        log("%d end", entry->trackIndex);
+//    });
+//    skeletonNode->setCompleteListener( [] (spTrackEntry* entry) {
+//        log("%d complete", entry->trackIndex);
+//    });
+//    skeletonNode->setDisposeListener( [] (spTrackEntry* entry) {
+//        log("%d dispose", entry->trackIndex);
+//    });
+//    skeletonNode->setEventListener( [] (spTrackEntry* entry, spEvent* event) {
+//        log("%d event: %s, %d, %f, %s", entry->trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
+//    });
+
     
-//    skeletonNode->setPosition(Vec2(_contentSize.width / 2, 0));
     skeletonNode->setScaleX(flipX?-1:1);
     addChild(skeletonNode);
     
@@ -322,6 +286,7 @@ float Hero::getHitAngle(float arrowAngle, int hurtBone)
         default:
             break;
     }
+    return 0;
 }
 
 void Hero::hitBySpear(L2E_HIT_HERO data)
@@ -349,13 +314,41 @@ void Hero::hitBySpear(L2E_HIT_HERO data)
             auto spear = Sprite::create("baobingjianbody.png");
             auto pos = Vec2(bodyX, bodyY);
 //            pos.rotate(Vec2::ZERO, CC_DEGREES_TO_RADIANS(-head->rotation));
+            spear->setTag(data.arrowId);
             spear->setPosition(pos);
             spear->setRotation(-data.arrowAngle);
 //            spear->setLocalZOrder(-10);
             target->addChild(spear);
             target->setLocalZOrder(-10);
-            
+            SHOW_SPEAR_COUNTDOWN count;
+            count.duration = maxShowSpearDuration;
+            count.hurtBone = 1;
+            showSpearCountDown[data.arrowId] = count;
         }
             break;
+    }
+}
+
+void Hero::countDownSpear(float dt)
+{
+    // 删除无效箭支
+    for (auto iter = showSpearCountDown.begin(); iter != showSpearCountDown.end(); ) {
+        if ((*iter).second.duration <= 0) {
+            switch ((*iter).second.hurtBone) {
+                case 1:
+                {
+                    auto target = skeletonNode->getNodeForSlot("head");
+                    target->removeChildByTag((*iter).first);
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            iter = showSpearCountDown.erase(iter);
+        }else{
+            (*iter).second.duration -= dt;
+            iter++;
+        }
     }
 }

@@ -9,6 +9,7 @@
 #include "ELProtocol.h"
 #include "GameDefine.h"
 #include "ClientLogic.hpp"
+#include "utils/TimeUtil.h"
 
 USING_NS_CC;
 
@@ -93,7 +94,6 @@ void GameCore::logic(float dt)
 void GameCore::arrangeLoad()
 {
     addLoadFunc(Load::LoadFunc(&GameCore::loadHero));
-    addLoadFunc(Load::LoadFunc(&GameCore::loadSpear));
     
     L2E_COMMON info;
     info.eProtocol = l2e_show_battle_load;
@@ -130,22 +130,18 @@ void GameCore::loadHero()
     info.eProtocol = l2e_setup_foo;
 //    float posx[2] = {-GameUtils::winSize.width/4, GameUtils::winSize.width/4};
 //    int userId[2] = {101, 778};
+    srand((unsigned int)(TimeUtil::get_system_tick_s()));
     float posx[2] = {GameUtils::winSize.width/4, GameUtils::winSize.width/4};
     int userId[2] = {101, 778};
     for (int i = 0; i < 2; i++) {
-        info.posx[i] = posx[i] + 50*rand_minus1_1();
-        info.posy[i] = ceil(3*rand_0_1())*GameUtils::winSize.height/8;
+        info.posx[i] = posx[i] + rand()%50;
+        info.posy[i] = ceil(rand()%3+1)*GameUtils::winSize.height/8;
     }
     memcpy(info.userId, userId, sizeof(int)*2);
     info.myUserId = 101;
     
     info.flipX = flipXOpt;
     ClientLogic::instance()->pass2Engine(&info);
-}
-
-void GameCore::loadSpear()
-{
-    
 }
 
 void GameCore::drawMyBow(E2L_DRAW_A_BOW data)

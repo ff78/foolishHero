@@ -40,7 +40,6 @@ public:
     void load();
     
     void loadHero();
-    void loadSpear();
     
     void drawMyBow(E2L_DRAW_A_BOW data);
     void looseMyArrow(E2L_LOOSE data);

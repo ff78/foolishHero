@@ -113,7 +113,7 @@ void SpearCurve::drawBow(float emitAngle, float velocity)
     bezierT = 0.5;
     
     float dur1 = abs(speedy0/accel);
-    if (speedy0 < 0) {
+    if (speedy0 <= 0) {
         dur1 = 0;
     }
     float dur2 = calcDurByDis(distance);
@@ -209,9 +209,9 @@ void SpearCurve::loose()
 
 void SpearCurve::update(float dt)
 {
-    currDur += dt;
+    currDur += dt*50;
     currDur = MIN(currDur, dur);
-    bezierT += dt;
+    bezierT = currDur/dur;
     bezierT = MAX(0, MIN(1, bezierT));
 //    log("bezierT:%f", bezierT);
 //    Vec2 arrowNor = (arrowTailPos-arrowHeadPos).getNormalized();

@@ -23,6 +23,13 @@ enum HERO_STATES
     STAB = 3,
     MAX,
 };
+
+typedef struct _SHOW_SPEAR_COUNTDOWN
+{
+    float duration;
+    int hurtBone;
+}SHOW_SPEAR_COUNTDOWN;
+
 class Hero : public cocos2d::Node
 {
 public:
@@ -53,6 +60,7 @@ public:
     cocos2d::Vec2 getHitPos(cocos2d::Vec2 arrowPos, int hurtBone);
     float getHitAngle(float arrowAngle, int hurtBone);
     void hitBySpear(L2E_HIT_HERO data);
+    void countDownSpear(float dt);
 
     CREATE_FUNC(Hero);
     
@@ -64,6 +72,8 @@ private:
     
     cocos2d::DrawNode *headCollide;
     cocos2d::Rect headRect;
+    std::map<int, SHOW_SPEAR_COUNTDOWN> showSpearCountDown;
+    const float maxShowSpearDuration = 3;
     
     float originHeadAngle;
     float originArmAngle;

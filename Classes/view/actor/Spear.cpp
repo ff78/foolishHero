@@ -92,10 +92,14 @@ void Spear::update(float dt)
     {
         case SPEAR_FLY:
         {
-            currDur += dt;
+            currDur += dt*50;//太慢，尝试放大50倍
             currDur = MIN(currDur, dur);
-            bezierT += dt;
+            bezierT = currDur/dur;
             bezierT = MAX(0, MIN(1, bezierT));
+            log("----------------分割线------------------");
+            log("currDur:%.2f", currDur);
+            log("bezierT:%.2f", bezierT);
+            
             refreshArrow();
             if (bezierT >= 1.0) {
                 bezierT = 0;
@@ -111,7 +115,7 @@ void Spear::changeState(SPEAR_STATES nextState)
 {
     if(currState == nextState)
         return;
-    log("change spear state from %d to %d", currState, nextState);
+//    log("change spear state from %d to %d", currState, nextState);
     exitState(currState);
     lastState    = currState;
     currState    = nextState;

@@ -31,6 +31,8 @@ public:
     
     void update(float dt);
     
+    float power2Velocity(float power);
+    
     CREATE_FUNC(DragLayer);
 private:
     cocos2d::Vec2 startPos;

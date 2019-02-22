@@ -23,6 +23,8 @@ GameScene::GameScene()
     drawBowing = false;
     loosed = false;
     
+    bezierT = 0;
+    
     bowListener = EventListenerCustom::create(DRAW_BOW, CC_CALLBACK_1(GameScene::drawBow, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(bowListener, -1);
     looseListener = EventListenerCustom::create(LOOSE_ARROW, CC_CALLBACK_1(GameScene::loose, this));
@@ -51,7 +53,9 @@ bool GameScene::init()
     dragLayer = DragLayer::create();
     addChild(dragLayer);
     
-
+    powerLayer = Layer::create();
+    addChild(powerLayer);
+    
     return true;
 }
 
@@ -72,9 +76,18 @@ void GameScene::update(float dt)
 {
     UIManager::instance()->loop(dt);
     if (drawBowing) {
+
+//        if (bezierT < 1.0) {
+//            float curr = cocos2d::tweenfunc::bezieratFunction(0, 2, 0.5, 1, bezierT);
+//            log("%.3f", curr);
+//
+//            bezierT += 0.01;
+//            bezierT = MIN(bezierT, 1.1);
+//        }
         float angle = convertDrawAngle(dragLayer->getDragAngle());
-        actorLayer->adjustBow(angle, dragLayer->getDragDistance());
-        curveLayer->adjustBow(angle, dragLayer->getDragDistance(), actorLayer->getMe()->getCurveId());
+        float vel = dragLayer->power2Velocity(dragLayer->getDragDistance());
+        actorLayer->adjustBow(angle, vel);
+        curveLayer->adjustBow(angle, vel, actorLayer->getMe()->getCurveId());
     }else if (loosed) {
 //        actorLayer->testLoose(dt);
         
@@ -91,12 +104,15 @@ void GameScene::setupView(void *pMsg)
 
 void GameScene::drawBow(cocos2d::EventCustom *event)
 {
+    refreshPowerCurve();
     L2E_DRAW_A_BOW info = *static_cast<L2E_DRAW_A_BOW *>(event->getUserData());
     if (info.userId == info.myUserId) {
         drawBowing = true;
         
         curveLayer->createCurve(actorLayer->getMe()->getPositionX(), actorLayer->getMe()->getPositionY());
         actorLayer->getMe()->setCurveId(curveLayer->getMaxCurveId());
+        
+//        float vel = power2Velocity(info.drawPower);
         actorLayer->drawBow(info.drawAngle, info.drawPower);
     }
     
@@ -104,6 +120,7 @@ void GameScene::drawBow(cocos2d::EventCustom *event)
 
 void GameScene::loose(cocos2d::EventCustom *event)
 {
+    clearPowerCurve();
     L2E_LOOSE info = *static_cast<L2E_LOOSE *>(event->getUserData());
     if (info.userId == info.myUserId) {
         drawBowing = false;
@@ -145,3 +162,29 @@ float GameScene::convertDrawAngle(float angle)
     
     return sendAngle;
 }
+
+void GameScene::refreshPowerCurve()
+{
+    auto maxAxis = DrawNode::create();
+    maxAxis->drawLine(Vec2(0, 500), Vec2(GameUtils::winSize.width, 500), Color4F::GREEN);
+    powerLayer->addChild(maxAxis);
+    for (int i = 0; i < 500; i++) {
+        auto powerNode = DrawNode::create();
+        float curr = cocos2d::tweenfunc::bezieratFunction(0, 0.2, 1.1, 1, i*0.002);
+        powerNode->drawPoint(Vec2(i, curr*500), 1, Color4F::YELLOW);
+        powerLayer->addChild(powerNode);
+    }
+}
+
+void GameScene::clearPowerCurve()
+{
+    powerLayer->removeAllChildren();
+}
+
+//float GameScene::power2Velocity(float power)
+//{
+//    float bezT = (power-20)/300;
+//    float curr = cocos2d::tweenfunc::bezieratFunction(0, 0.2, 1.1, 1, bezT);
+//    return 20+300*curr;
+//}
+

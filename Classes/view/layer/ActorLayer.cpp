@@ -126,9 +126,12 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
                 angle -= 360;
             }
         }
-        me->loose(angle, data.drawPower);
+//        auto vel = power2Velocity(data.drawPower);
+        auto vel = data.drawPower;
+        me->loose(angle, vel);
         spear->setOwnerId(data.userId);
         addChild(spear);
+        data.drawPower = vel;
         spear->setupWithData(data, me->getFlipX(), me->getPosition());
     }else{
         float angle = data.drawAngle;
@@ -138,9 +141,12 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
                 angle -= 360;
             }
         }
-        master->loose(angle, data.drawPower);
+//        auto vel = power2Velocity(data.drawPower);
+        auto vel = data.drawPower;
+        master->loose(angle, vel);
         spear->setOwnerId(data.userId);
         addChild(spear);
+        data.drawPower = vel;
         spear->setupWithData(data, master->getFlipX(), master->getPosition());
     }
     
@@ -260,3 +266,11 @@ float ActorLayer::convertHitPos(float arrowPosX, Hero *hero)
         return arrowPosX - hero->getPositionX();
     }
 }
+
+//float ActorLayer::power2Velocity(float power)
+//{
+//    float bezT = (power-20)/300;
+//    float curr = cocos2d::tweenfunc::bezieratFunction(0, 0.2, 1.1, 1, bezT);
+//    return 20+300*curr;
+//}
+

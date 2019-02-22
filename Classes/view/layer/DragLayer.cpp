@@ -85,10 +85,12 @@ void DragLayer::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
         dragAngle = CC_RADIANS_TO_DEGREES((currPos-startPos).getAngle());
         dragAngle += 180;//反向是箭头角度
         if (dragDistance <= 30) {
-            dragDistance = distance;
+//            dragDistance = distance;
+            dragDistance = MIN(320, distance);
             drawABow();
         }else{
-            dragDistance = distance;
+//            dragDistance = distance;
+            dragDistance = MIN(320, distance);
         }
     }else{
         if(dragDistance == 0) {//没有开弓过，不要开弓
@@ -140,7 +142,7 @@ void DragLayer::drawABow()
     E2L_DRAW_A_BOW info;
     info.eProtocol = e2l_draw_bow;
     info.drawAngle = dragAngle;
-    info.drawPower = dragDistance;
+    info.drawPower = power2Velocity(dragDistance);
     ClientLogic::instance()->ProcessUIRequest(&info);
 }
 
@@ -152,7 +154,7 @@ void DragLayer::loose()
     E2L_LOOSE info;
     info.eProtocol = e2l_loose;
     info.drawAngle = dragAngle;
-    info.drawPower = dragDistance;
+    info.drawPower = power2Velocity(dragDistance);
     ClientLogic::instance()->ProcessUIRequest(&info);
 }
 
@@ -164,4 +166,11 @@ void DragLayer::update(float dt)
     }else{
         bowString->clear();
     }
+}
+
+float DragLayer::power2Velocity(float power)
+{
+    float bezT = (power-20)/300;
+    float curr = cocos2d::tweenfunc::bezieratFunction(0, 0.2, 1.1, 1, bezT);
+    return 20+300*curr;
 }

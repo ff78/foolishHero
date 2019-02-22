@@ -32,13 +32,20 @@ public:
     
     float convertDrawAngle(float angle);
     
+    void refreshPowerCurve();
+    void clearPowerCurve();
+//    float power2Velocity(float power);
+    
     CREATE_FUNC(GameScene);
 private:
     ActorLayer *actorLayer;
     DragLayer *dragLayer;
     CurveLayer *curveLayer;
     
+    cocos2d::Layer *powerLayer;
+    
     bool loosed;
+    float bezierT;
     CC_SYNTHESIZE_READONLY(bool, flipXOpt, FlipXOpt);
     CC_SYNTHESIZE_READONLY(bool, drawBowing, DrawBowing);
     
