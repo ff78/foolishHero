@@ -46,6 +46,7 @@
 		70877AC221FD523500C4DF4A /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABD21FD523500C4DF4A /* 01.png */; };
 		70877AC321FD523500C4DF4A /* DemoPlayer.csb in Resources */ = {isa = PBXBuildFile; fileRef = 70877ABE21FD523500C4DF4A /* DemoPlayer.csb */; };
 		70877AC621FDB7D200C4DF4A /* MathAide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70877AC421FDB7D200C4DF4A /* MathAide.cpp */; };
+		70AF2BC222252A16008593FD /* aim_point.png in Resources */ = {isa = PBXBuildFile; fileRef = 70AF2BC022252A16008593FD /* aim_point.png */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -171,6 +172,7 @@
 		70877ABE21FD523500C4DF4A /* DemoPlayer.csb */ = {isa = PBXFileReference; lastKnownFileType = file; path = DemoPlayer.csb; sourceTree = "<group>"; };
 		70877AC421FDB7D200C4DF4A /* MathAide.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathAide.cpp; sourceTree = "<group>"; };
 		70877AC521FDB7D200C4DF4A /* MathAide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathAide.h; sourceTree = "<group>"; };
+		70AF2BC022252A16008593FD /* aim_point.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aim_point.png; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -379,6 +381,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				70AF2BC022252A16008593FD /* aim_point.png */,
 				707125412212A95A00B003C2 /* spineboy-pro.json */,
 				707125422212A95A00B003C2 /* spineboy.atlas */,
 				7071253F2212A95A00B003C2 /* spineboy.png */,
@@ -716,6 +719,7 @@
 				707125442212A95A00B003C2 /* spineboy-pro.json in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				70877AC321FD523500C4DF4A /* DemoPlayer.csb in Resources */,
+				70AF2BC222252A16008593FD /* aim_point.png in Resources */,
 				707125452212A95A00B003C2 /* spineboy.atlas in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				707125432212A95A00B003C2 /* spineboy.png in Resources */,

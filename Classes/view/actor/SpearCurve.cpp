@@ -75,6 +75,12 @@ bool SpearCurve::init()
     arrowTail->drawPoint(Vec2::ZERO, 4, Color4F(0, 0, 1, 1));
     addChild(arrowTail);
     
+    for (int i = 0; i < 5; i++) {
+        aimPoint[i] = Sprite::create("aim_point.png");
+        aimPoint[i]->setVisible(false);
+        aimPoint[i]->setScale((1 - i*0.18)*0.3);
+        addChild(aimPoint[i]);
+    }
     return true;
 }
 
@@ -140,6 +146,15 @@ void SpearCurve::refreshCurve()
     
     bezierCurve->clear();
     bezierCurve->drawQuadBezier(startPos, controlPos, endPos, 50, Color4F(1, 0, 0, 1));
+    
+    for (int i = 0; i < 5; i++) {
+        float posT = i*0.06;
+        float x = pow((1-posT), 2) * startPos.x + 2*posT*(1-posT) * controlPos.x + pow(posT, 2)*endPos.x;
+        float y = pow((1-posT), 2) * startPos.y + 2*posT*(1-posT) * controlPos.y + pow(posT, 2)*endPos.y;
+        aimPoint[i]->setVisible(true);
+        aimPoint[i]->setPosition(x, y);
+    }
+    
 }
 
 void SpearCurve::refreshArrow()
@@ -205,6 +220,7 @@ void SpearCurve::loose()
     curveId = 0;
     bezierT = 0;
     log("总时间：%f", dur);
+//    removeFromParent();
 }
 
 void SpearCurve::update(float dt)

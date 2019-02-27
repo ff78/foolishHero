@@ -86,8 +86,13 @@ void GameScene::update(float dt)
 //        }
         float angle = convertDrawAngle(dragLayer->getDragAngle());
         float vel = dragLayer->power2Velocity(dragLayer->getDragDistance());
+
         actorLayer->adjustBow(angle, vel);
-        curveLayer->adjustBow(angle, vel, actorLayer->getMe()->getCurveId());
+        float curveAngle = angle;
+        if (actorLayer->getMe()->getFlipX()) {
+            curveAngle = 180-angle;
+        }
+        curveLayer->adjustBow(curveAngle, vel, actorLayer->getMe()->getCurveId());
     }else if (loosed) {
 //        actorLayer->testLoose(dt);
         
@@ -108,8 +113,11 @@ void GameScene::drawBow(cocos2d::EventCustom *event)
     L2E_DRAW_A_BOW info = *static_cast<L2E_DRAW_A_BOW *>(event->getUserData());
     if (info.userId == info.myUserId) {
         drawBowing = true;
-        
-        curveLayer->createCurve(actorLayer->getMe()->getPositionX(), actorLayer->getMe()->getPositionY());
+        auto guntipPos = actorLayer->getMe()->getGuntipPos();
+        if(actorLayer->getMe()->getFlipX()){
+            guntipPos.x = -guntipPos.x;
+        }
+        curveLayer->createCurve(guntipPos.x + actorLayer->getMe()->getPositionX(), guntipPos.y+actorLayer->getMe()->getPositionY());
         actorLayer->getMe()->setCurveId(curveLayer->getMaxCurveId());
         
 //        float vel = power2Velocity(info.drawPower);
@@ -137,24 +145,27 @@ void GameScene::loose(cocos2d::EventCustom *event)
 float GameScene::convertDrawAngle(float angle)
 {
     float sendAngle = angle;
-//    if (flipXOpt == true) {//自己设定了翻转，把角度转成180到-180度
-//        sendAngle = 180 - angle;
-//    } else {
-        if (angle > 180) {//没有翻转，把超过180的角度转为负角度
+    if (actorLayer->getMe()->getFlipX()) {//自己设定了翻转，把角度转成180到-180度
+        sendAngle = 180 - angle;
+    }else{
+        if (angle > 180) {
             sendAngle = angle-360;
         }
-//    }
+        
+    }
     //没翻转时把角度限制在75到-75度，否则角度应在105到180或-105到-180之间
     if (sendAngle >= 0) {
-        if (flipXOpt) {
-            sendAngle = MAX(105, sendAngle);
+        if (actorLayer->getMe()->getFlipX()) {
+            sendAngle = MIN(75, sendAngle);
+//            sendAngle = MAX(105, sendAngle);
         } else {
             sendAngle = MIN(75, sendAngle);
         }
         
     } else {
-        if (flipXOpt) {
-            sendAngle = MIN(-105, sendAngle);
+        if (actorLayer->getMe()->getFlipX()) {
+//            sendAngle = MIN(-105, sendAngle);
+            sendAngle = MAX(-75, sendAngle);
         } else {
             sendAngle = MAX(-75, sendAngle);
         }

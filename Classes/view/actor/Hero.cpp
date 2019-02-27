@@ -170,6 +170,7 @@ void Hero::loose(float emitAngle, float velocity)
     changeState(LOOSE);
     
     auto torso = skeletonNode->findBone("rear-upper-arm");
+    log("hero::loose: %.2f", emitAngle);
     torso->data->rotation = 180+emitAngle;
     auto head = skeletonNode->findBone("head");
     head->data->rotation = emitAngle;
@@ -204,7 +205,6 @@ void Hero::setupView(std::string res)
 //        log("%d event: %s, %d, %f, %s", entry->trackIndex, event->data->name, event->intValue, event->floatValue, event->stringValue);
 //    });
 
-    
     skeletonNode->setScaleX(flipX?-1:1);
     addChild(skeletonNode);
     
@@ -351,4 +351,13 @@ void Hero::countDownSpear(float dt)
             iter++;
         }
     }
+}
+
+Vec2 Hero::getGuntipPos()
+{
+    auto guntip = skeletonNode->findBone("gun-tip");
+    float x = guntip->worldX;
+    float y = guntip->worldY;
+//    return Vec2(x, y);
+    return Vec2(20,80);
 }

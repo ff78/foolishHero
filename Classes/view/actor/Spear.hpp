@@ -73,6 +73,7 @@ private:
     float dur;
     float currDur;
     
+    CC_SYNTHESIZE_READONLY(bool, flipX, FlipX);
     CC_SYNTHESIZE_READONLY(float, alive, Alive);
     CC_SYNTHESIZE(int, ownerId, OwnerId);
     CC_SYNTHESIZE(int, arrowId, ArrowId);

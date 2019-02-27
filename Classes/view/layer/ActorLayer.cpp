@@ -120,34 +120,48 @@ void ActorLayer::looseBow(cocos2d::EventCustom *event)
     
     if (data.userId == data.myUserId) {
         float angle = data.drawAngle;
-        if (me->getFlipX()) {
-            angle = 180-data.drawAngle;
-            if (data.drawAngle < 0) {
-                angle -= 360;
-            }
-        }
-//        auto vel = power2Velocity(data.drawPower);
+//        if (me->getFlipX()) {
+//            angle = 180-data.drawAngle;
+//            if (data.drawAngle < 0) {
+//                angle -= 360;
+//            }
+//        }
+//        if (me->getFlipX()) {//自己设定了翻转，把角度转成180到-180度
+//            angle = 180 - angle;
+//        } else {
+//            if (angle > 180) {//没有翻转，把超过180的角度转为负角度
+//                angle = angle-360;
+//            }
+//        }
         auto vel = data.drawPower;
         me->loose(angle, vel);
         spear->setOwnerId(data.userId);
         addChild(spear);
         data.drawPower = vel;
-        spear->setupWithData(data, me->getFlipX(), me->getPosition());
+        auto guntipPos = me->getGuntipPos();
+        if(me->getFlipX()){
+            guntipPos.x = -guntipPos.x;
+        }
+        spear->setupWithData(data, me->getFlipX(), guntipPos + me->getPosition());
     }else{
         float angle = data.drawAngle;
-        if (!master->getFlipX()) {
-            angle = 180-data.drawAngle;
-            if (data.drawAngle < 0) {
-                angle -= 360;
-            }
-        }
-//        auto vel = power2Velocity(data.drawPower);
+//        if (!master->getFlipX()) {
+//            angle = 180-data.drawAngle;
+//            if (data.drawAngle < 0) {
+//                angle -= 360;
+//            }
+//        }
+
         auto vel = data.drawPower;
         master->loose(angle, vel);
         spear->setOwnerId(data.userId);
         addChild(spear);
         data.drawPower = vel;
-        spear->setupWithData(data, master->getFlipX(), master->getPosition());
+        auto guntipPos = master->getGuntipPos();
+        if(master->getFlipX()){
+            guntipPos.x = -guntipPos.x;
+        }
+        spear->setupWithData(data, master->getFlipX(), guntipPos + master->getPosition());
     }
     
     spearMap[maxArrowId] = spear;
@@ -180,6 +194,11 @@ void ActorLayer::update(float dt)
         }
         
         float arrowAngle = arrow->getSpearAngle();
+//        if (arrow->getFlipX()) {
+//            arrowAngle = -arrowAngle;
+////        }else{
+////            arrowAngle = 180-arrowAngle;
+//        }
         Vec2 arrowPos = arrow->getArrowPos();
 
         if (arrow->getOwnerId() == me->getUserId())
@@ -197,7 +216,8 @@ void ActorLayer::update(float dt)
                     info.hurtBone = 1;
                     info.arrowId = arrow->getArrowId();
                     //  转换成无翻转的箭支角度
-                    info.arrowAngle = convertArrowAngle(arrowAngle, master);
+                    info.arrowAngle = convertArrowAngle(arrow->getSpearAngle(), master);
+//                    info.arrowAngle = arrowAngle;
                     //  转换成相对命中骨骼的角度
                     info.arrowAngle = master->getHitAngle(info.arrowAngle, info.hurtBone);
                     //  转换成无翻转的相对角色的坐标
@@ -212,7 +232,7 @@ void ActorLayer::update(float dt)
                     break;
             }
         } else {
-            int hitResult = me->hitCheck(arrowPos, 180-arrowAngle, Size(93, 15));
+            int hitResult = me->hitCheck(arrowPos, arrowAngle, Size(70, 8));
             switch(hitResult)
             {
                 case 0:
@@ -221,11 +241,12 @@ void ActorLayer::update(float dt)
                 {
                     E2L_HIT_HERO info;
                     info.eProtocol = e2l_hit_hero;
-                    info.hitUserId = master->getUserId();
+                    info.hitUserId = me->getUserId();
                     info.hurtBone = 1;
                     info.arrowId = arrow->getArrowId();
                     //  转换成无翻转的箭支角度
-                    info.arrowAngle = convertArrowAngle(arrowAngle, me);
+                    info.arrowAngle = convertArrowAngle(arrow->getSpearAngle(), me);
+//                    info.arrowAngle = arrowAngle;
                     //  转换成相对命中骨骼的角度
                     info.arrowAngle = me->getHitAngle(info.arrowAngle, info.hurtBone);
                     //  转换成无翻转的相对角色的坐标
@@ -248,11 +269,7 @@ float ActorLayer::convertArrowAngle(float arrowAngle, Hero *hero)
     float sendAngle = arrowAngle;
 
     if (hero->getFlipX()) {
-        if (sendAngle >= 0) {
-            sendAngle = 180 - arrowAngle;
-        }else{
-            sendAngle = -180 - arrowAngle;
-        }
+        sendAngle = 180 - arrowAngle;
     }
     
     return sendAngle;

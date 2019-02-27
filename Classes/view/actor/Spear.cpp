@@ -19,6 +19,7 @@ Spear::Spear()
     spearAngle = 0;
     arrowId = -1;
     alive = true;
+    flipX = false;
 }
 
 Spear::~Spear()
@@ -70,18 +71,22 @@ void Spear::onExit()
 void Spear::setupWithData(L2E_LOOSE data, bool flipX, cocos2d::Vec2 pos)
 {
     float angle = data.drawAngle;
-    if (flipX) {
-        angle = 180-data.drawAngle;
-        if (data.drawAngle < 0) {
-            angle -= 360;
-        }
+//    if (flipX) {
+//        angle = 180-data.drawAngle;
+//        if (data.drawAngle < 0) {
+//            angle -= 360;
+//        }
+//    }
+    this->flipX = flipX;
+    if (flipX) {//自己设定了翻转，把角度转成180到-180度
+        angle = 180 - angle;
     }
     this->emitAngle = angle;
     this->startPos =  pos;
 
     setPosition(pos);
-    setScaleX(flipX?-1:1);
-    drawBow(data.drawAngle, data.drawPower);
+//    setScaleX(flipX?-1:1);
+    drawBow(angle, data.drawPower);
     
     changeState(SPEAR_FLY);
 }
@@ -96,9 +101,9 @@ void Spear::update(float dt)
             currDur = MIN(currDur, dur);
             bezierT = currDur/dur;
             bezierT = MAX(0, MIN(1, bezierT));
-            log("----------------分割线------------------");
-            log("currDur:%.2f", currDur);
-            log("bezierT:%.2f", bezierT);
+//            log("----------------分割线------------------");
+//            log("currDur:%.2f", currDur);
+//            log("bezierT:%.2f", bezierT);
             
             refreshArrow();
             if (bezierT >= 1.0) {
@@ -249,6 +254,7 @@ void Spear::refreshArrow()
     Vec2 arrowNor = (arrowHeadPos-arrowTailPos).getNormalized();
     spearAngle = CC_RADIANS_TO_DEGREES(arrowNor.getAngle());
 //    log("刷新角度 angle:%f", spearAngle);
+    
     spt->setRotation(-spearAngle);
     
 }

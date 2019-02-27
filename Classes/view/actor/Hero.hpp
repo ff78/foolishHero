@@ -61,6 +61,8 @@ public:
     float getHitAngle(float arrowAngle, int hurtBone);
     void hitBySpear(L2E_HIT_HERO data);
     void countDownSpear(float dt);
+    
+    cocos2d::Vec2 getGuntipPos();
 
     CREATE_FUNC(Hero);
     

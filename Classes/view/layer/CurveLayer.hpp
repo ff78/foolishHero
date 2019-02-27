@@ -28,7 +28,6 @@ public:
     
     CREATE_FUNC(CurveLayer);
 private:
-    
     cocos2d::EventListenerCustom *setupHeroListener;
 //    cocos2d::EventListenerCustom *looseListener;
     

@@ -155,6 +155,14 @@ void GameCore::drawMyBow(E2L_DRAW_A_BOW data)
     info.drawAngle = sendAngle;
     info.drawPower = data.drawPower;
     ClientLogic::instance()->pass2Engine(&info);
+    
+    L2E_DRAW_A_BOW info2;
+    info2.eProtocol = l2e_draw_bow;
+    info2.userId = 778;
+    info2.myUserId = 101;
+    info2.drawAngle = sendAngle;
+    info2.drawPower = data.drawPower;
+    ClientLogic::instance()->pass2Engine(&info2);
 }
 
 void GameCore::looseMyArrow(E2L_LOOSE data)
@@ -168,6 +176,14 @@ void GameCore::looseMyArrow(E2L_LOOSE data)
     info.drawAngle = sendAngle;
     info.drawPower = data.drawPower;
     ClientLogic::instance()->pass2Engine(&info);
+    
+    L2E_LOOSE info2;
+    info2.eProtocol = l2e_loose;
+    info2.userId = 778;
+    info2.myUserId = 101;
+    info2.drawAngle = sendAngle;
+    info2.drawPower = data.drawPower;
+    ClientLogic::instance()->pass2Engine(&info2);
 }
 
 void GameCore::hitHero(E2L_HIT_HERO data)

@@ -57,6 +57,7 @@ private:
     
     //辅助曲线
     cocos2d::DrawNode *bezierCurve;
+    cocos2d::Sprite *aimPoint[5];
     
     float bezierT;
     
