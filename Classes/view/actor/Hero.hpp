@@ -21,6 +21,8 @@ enum HERO_STATES
     DRAW = 1,
     LOOSE = 2,
     STAB = 3,
+    DIE = 4,
+    RELIVE = 5,
     MAX,
 };
 
@@ -38,6 +40,7 @@ public:
     
     bool init();
     void onEnter();
+    void onExit();
     
     void updateState();
     void update(float dt);
@@ -54,7 +57,9 @@ public:
     
     void back2Stand();
     void getHeadBB();
+    void relive();
     void endLoose(spTrackEntry *entry);
+    void endDeath(spTrackEntry *entry);
     
     int hitCheck(cocos2d::Vec2 arrowCenter, float angle, cocos2d::Size arrowSize);
     cocos2d::Vec2 getHitPos(cocos2d::Vec2 arrowPos, int hurtBone);

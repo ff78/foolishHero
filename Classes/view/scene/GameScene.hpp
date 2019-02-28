@@ -13,6 +13,7 @@
 #include "../layer/ActorLayer.hpp"
 #include "../layer/DragLayer.hpp"
 #include "../layer/CurveLayer.hpp"
+#include "../layer/HitEffectLayer.hpp"
 
 class GameScene : public cocos2d::Scene {
 public:
@@ -29,6 +30,7 @@ public:
     
     void drawBow(cocos2d::EventCustom *event);
     void loose(cocos2d::EventCustom *event);
+    void hitHero(cocos2d::EventCustom *event);
     
     float convertDrawAngle(float angle);
     
@@ -41,6 +43,7 @@ private:
     ActorLayer *actorLayer;
     DragLayer *dragLayer;
     CurveLayer *curveLayer;
+    HitEffectLayer *effectLayer;
     
     cocos2d::Layer *powerLayer;
     
@@ -52,6 +55,7 @@ private:
 private:
     cocos2d::EventListenerCustom *bowListener;
     cocos2d::EventListenerCustom *looseListener;
+    cocos2d::EventListenerCustom *hitListener;
     
 };
 

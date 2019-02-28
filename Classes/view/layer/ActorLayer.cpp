@@ -19,12 +19,15 @@ ActorLayer::ActorLayer()
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(setupHeroListener, -1);
     hitHeroListener = EventListenerCustom::create(HIT_HERO, CC_CALLBACK_1(ActorLayer::hitHero, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(hitHeroListener, -1);
+    reliveHeroListener = EventListenerCustom::create(RELIVE_HERO, CC_CALLBACK_1(ActorLayer::reliveFoo, this));
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(reliveHeroListener, -1);
 }
 
 ActorLayer::~ActorLayer()
 {
     Director::getInstance()->getEventDispatcher()->removeEventListener(setupHeroListener);
     Director::getInstance()->getEventDispatcher()->removeEventListener(hitHeroListener);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(reliveHeroListener);
 }
 
 bool ActorLayer::init()
@@ -80,6 +83,54 @@ void ActorLayer::setupFoo(cocos2d::EventCustom *event)
             master->setupView("DemoPlayer.csb");
             addChild(master);
         }
+    }
+}
+
+void ActorLayer::reliveFoo(cocos2d::EventCustom *event)
+{
+    L2E_RELIVE_HERO data = *static_cast<L2E_RELIVE_HERO*>(event->getUserData());
+
+    if (data.userId == data.myUserId) {
+//        if (me!=nullptr) {
+//            me->removeFromParent();
+//        }
+//
+//        me = Hero::create();
+//        //  翻译坐标
+//        float posx = GameUtils::winSize.width/2 - data.posx;
+//        if (data.flipX) {
+//            posx = GameUtils::winSize.width/2 + data.posx;
+//        }
+//        me->setPosition(posx, data.posy);
+//        me->setFlipX(data.flipX);
+//        me->setUserId(data.myUserId);
+//        me->setupView("DemoPlayer.csb");
+//        addChild(me);
+        float posx = GameUtils::winSize.width/2 - data.posx;
+        if (data.flipX) {
+            posx = GameUtils::winSize.width/2 + data.posx;
+        }
+        me->setPosition(posx, data.posy);
+        me->setFlipX(data.flipX);
+        me->setUserId(data.userId);
+        me->relive();
+    }else{
+        master->relive();
+//        if (master != nullptr) {
+//            master->removeFromParent();
+//        }
+//        master = Hero::create();
+//        //  翻译坐标
+        float posx = GameUtils::winSize.width/2 + data.posx;
+        if (data.flipX) {
+            posx = GameUtils::winSize.width/2 - data.posx;
+        }
+        master->setPosition(posx, data.posy);
+        master->setFlipX(!data.flipX);
+        master->setUserId(data.userId);
+        master->relive();
+//        master->setupView("DemoPlayer.csb");
+//        addChild(master);
     }
 }
 

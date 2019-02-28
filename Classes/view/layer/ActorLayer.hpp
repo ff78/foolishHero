@@ -25,6 +25,7 @@ public:
     void setupFoo(cocos2d::EventCustom *event);
     void looseBow(cocos2d::EventCustom *event);
     void hitHero(cocos2d::EventCustom *event);
+    void reliveFoo(cocos2d::EventCustom *event);
     void adjustBow(float angle, float power);
     void drawBow(float angle, float power);
     void testLoose(float dt);
@@ -39,6 +40,7 @@ private:
     std::map<int, Spear *> spearMap;
     cocos2d::EventListenerCustom *setupHeroListener;
     cocos2d::EventListenerCustom *hitHeroListener;
+    cocos2d::EventListenerCustom *reliveHeroListener;
     
     CC_SYNTHESIZE_READONLY(int, maxArrowId, MaxArrowId);
     CC_SYNTHESIZE_READONLY(Hero *, me, Me);

@@ -26,6 +26,8 @@ public:
     void drawABow(void *pMsg);
     void loose(void *pMsg);
     void hitHero(void *pMsg);
+    void reliveHero(void *pMsg);
+    void showRoundEnd(void *pMsg);
     
     void loop(float dt);
 };

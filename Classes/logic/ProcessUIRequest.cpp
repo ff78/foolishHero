@@ -47,3 +47,9 @@ void ClientLogic::BattleHitHero(void *pMsg)
     E2L_HIT_HERO *pMsgInfo = (E2L_HIT_HERO *)pMsg;
     GameCore::instance()->hitHero(*pMsgInfo);
 }
+
+void ClientLogic::BattleCanRelive(void *pMsg)
+{
+    E2L_CAN_RELIVE *pMsgInfo = (E2L_CAN_RELIVE *)pMsg;
+    GameCore::instance()->canRelive(*pMsgInfo);
+}

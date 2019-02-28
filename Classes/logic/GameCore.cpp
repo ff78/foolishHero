@@ -19,6 +19,7 @@ lastState(FIGHT_GAME_NONE),
 originState(FIGHT_GAME_NONE)
 {
     flipXOpt = false;
+    
 }
 
 GameCore::~GameCore()
@@ -126,6 +127,11 @@ void GameCore::onLoadFinish()
 
 void GameCore::loadHero()
 {
+    heroHp[0] = maxMyHP;
+    heroHp[1] = maxMasterHP;
+    heroReliveCount[0] = 2;
+    heroReliveCount[1] = 2;
+    
     L2E_SETUP_FOO info;
     info.eProtocol = l2e_setup_foo;
 //    float posx[2] = {-GameUtils::winSize.width/4, GameUtils::winSize.width/4};
@@ -188,8 +194,19 @@ void GameCore::looseMyArrow(E2L_LOOSE data)
 
 void GameCore::hitHero(E2L_HIT_HERO data)
 {
-//    float sendAngle = convertDrawAngle(data.arrowAngle);
     //此处应改为向服务器发送，再等待服务器广播
+    int userId[2] = {101, 778};
+    int hp = 0;
+    for (int i = 0; i < 2; i++) {
+        if (userId[i] == data.hitUserId) {
+            heroHp[i] -= 153;
+            heroHp[i] = MAX(0, heroHp[i]);
+            hp = heroHp[i];
+            break;
+        }
+    }
+    
+//    float sendAngle = convertDrawAngle(data.arrowAngle);
     L2E_HIT_HERO info;
     info.eProtocol = l2e_hit_hero;
     info.hitUserId = data.hitUserId;
@@ -199,7 +216,8 @@ void GameCore::hitHero(E2L_HIT_HERO data)
     info.arrowPosX = data.arrowPosX;
     info.arrowPosY = data.arrowPosY;
     info.hurtValue = 153;
-    info.critType = 0;
+    info.critType = 1;
+    info.hp = hp;
     ClientLogic::instance()->pass2Engine(&info);
 }
 
@@ -221,4 +239,46 @@ float GameCore::convertDrawAngle(float angle)
     }
     
     return sendAngle;
+}
+
+void GameCore::canRelive(E2L_CAN_RELIVE data)
+{
+    int reliveUserId = 0;
+    int index = 0;
+    int fullHp = 0;
+    int userId[2] = {101, 778};
+    for (int i = 0; i < 2; i++) {
+        if (userId[i] == data.userId) {
+            reliveUserId = userId[i];
+            index = i;
+            fullHp = ((i==0)?maxMyHP:maxMasterHP);
+            break;
+        }
+    }
+    
+    if (heroHp[index] > 0) {
+        return;
+    }
+    
+    if (heroReliveCount[index] <= 0) {
+        L2E_SHOW_ROUND_END info;
+        info.eProtocol = l2e_show_round_end;
+        ClientLogic::instance()->pass2Engine(&info);
+        return;
+    }
+    
+    int count = heroReliveCount[index]--;
+    int hp = heroHp[index] = fullHp;
+    
+    L2E_RELIVE_HERO info;
+    info.eProtocol = l2e_relive_hero;
+    srand((unsigned int)(TimeUtil::get_system_tick_s()));
+    info.userId = reliveUserId;
+    info.posx = GameUtils::winSize.width/4 + rand()%50;
+    info.posy = ceil(rand()%3+1)*GameUtils::winSize.height/8;
+    info.myUserId = 101;
+    info.hpValue = hp;
+    info.reliveCount = count;
+    info.flipX = flipXOpt;
+    ClientLogic::instance()->pass2Engine(&info);
 }

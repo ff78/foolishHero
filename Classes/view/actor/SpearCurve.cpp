@@ -220,7 +220,7 @@ void SpearCurve::loose()
     curveId = 0;
     bezierT = 0;
     log("总时间：%f", dur);
-//    removeFromParent();
+    removeFromParent();
 }
 
 void SpearCurve::update(float dt)

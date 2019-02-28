@@ -24,6 +24,7 @@ ClientLogic::ClientLogic()
     m_UI2LogicFunc[e2l_draw_bow] = &ClientLogic::BattleDrawBow;
     m_UI2LogicFunc[e2l_loose] = &ClientLogic::BattleLoose;
     m_UI2LogicFunc[e2l_hit_hero] = &ClientLogic::BattleHitHero;
+    m_UI2LogicFunc[e2l_can_relive] = &ClientLogic::BattleCanRelive;
     
     m_LogicStateFunc[GAME_STATE_INIT] = &ClientLogic::onStateInit;
     m_LogicStateFunc[GAME_STATE_FIGHT] = &ClientLogic::onStateFight;

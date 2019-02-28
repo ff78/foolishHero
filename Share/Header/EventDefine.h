@@ -41,6 +41,7 @@ typedef struct __CREATE_BULLET_DATA
 #define DRAW_BOW                                        "DRAW_BOW"
 #define LOOSE_ARROW                                     "LOOSE_ARROW"
 #define HIT_HERO                                        "HIT_HERO"
+#define RELIVE_HERO                                     "RELIVE_HERO"
 
 
 #endif /* EventDefine_h */

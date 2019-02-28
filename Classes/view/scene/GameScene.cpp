@@ -29,6 +29,8 @@ GameScene::GameScene()
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(bowListener, -1);
     looseListener = EventListenerCustom::create(LOOSE_ARROW, CC_CALLBACK_1(GameScene::loose, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(looseListener, -1);
+    hitListener = EventListenerCustom::create(HIT_HERO, CC_CALLBACK_1(GameScene::hitHero, this));
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(hitListener, -1);
 }
 
 
@@ -36,6 +38,7 @@ GameScene::~GameScene()
 {
     Director::getInstance()->getEventDispatcher()->removeEventListener(bowListener);
     Director::getInstance()->getEventDispatcher()->removeEventListener(looseListener);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(hitListener);
 }
 
 bool GameScene::init()
@@ -56,6 +59,9 @@ bool GameScene::init()
     powerLayer = Layer::create();
     addChild(powerLayer);
     
+    effectLayer = HitEffectLayer::create();
+    addChild(effectLayer);
+    
     return true;
 }
 
@@ -75,6 +81,9 @@ void GameScene::onExit()
 void GameScene::update(float dt)
 {
     UIManager::instance()->loop(dt);
+    if (actorLayer->getMe() == nullptr || actorLayer->getMe()->getCurrState() == DIE) {
+        return;
+    }
     if (drawBowing) {
 
 //        if (bezierT < 1.0) {
@@ -84,6 +93,7 @@ void GameScene::update(float dt)
 //            bezierT += 0.01;
 //            bezierT = MIN(bezierT, 1.1);
 //        }
+
         float angle = convertDrawAngle(dragLayer->getDragAngle());
         float vel = dragLayer->power2Velocity(dragLayer->getDragDistance());
 
@@ -112,6 +122,9 @@ void GameScene::drawBow(cocos2d::EventCustom *event)
     refreshPowerCurve();
     L2E_DRAW_A_BOW info = *static_cast<L2E_DRAW_A_BOW *>(event->getUserData());
     if (info.userId == info.myUserId) {
+        if (actorLayer->getMe() == nullptr || actorLayer->getMe()->getCurrState() == DIE) {
+            return;
+        }
         drawBowing = true;
         auto guntipPos = actorLayer->getMe()->getGuntipPos();
         if(actorLayer->getMe()->getFlipX()){
@@ -131,6 +144,9 @@ void GameScene::loose(cocos2d::EventCustom *event)
     clearPowerCurve();
     L2E_LOOSE info = *static_cast<L2E_LOOSE *>(event->getUserData());
     if (info.userId == info.myUserId) {
+        if (actorLayer->getMe() == nullptr || actorLayer->getMe()->getCurrState() == DIE) {
+            return;
+        }
         drawBowing = false;
         loosed = true;
         
@@ -140,6 +156,31 @@ void GameScene::loose(cocos2d::EventCustom *event)
         }
     }
     actorLayer->looseBow(event);
+}
+
+void GameScene::hitHero(cocos2d::EventCustom *event)
+{
+    L2E_HIT_HERO data = *static_cast<L2E_HIT_HERO*>(event->getUserData());
+    Hero *man;
+    if (actorLayer->getMe() != nullptr && data.hitUserId == actorLayer->getMe()->getUserId()) {
+        man = actorLayer->getMe();
+    }else if (actorLayer->getMaster() != nullptr || data.hitUserId == actorLayer->getMaster()->getUserId()) {
+        man = actorLayer->getMaster();
+    }else{
+        return;
+    }
+    int fontPosX = (man->getFlipX()?1:-1)*80;
+    fontPosX += rand()%15;
+    fontPosX += man->getPositionX();
+    int fontPosY = man->getPositionY();
+    
+    effectLayer->addHurtNum(data.critType, data.hurtValue, Vec2(fontPosX, fontPosY));
+    if (data.hurtBone == 1) {
+        int imgPosX = (man->getFlipX()?-1:1)*30;
+        imgPosX += man->getPositionX();
+        effectLayer->addCritFlag(Vec2(imgPosX, fontPosY));
+    }
+    
 }
 
 float GameScene::convertDrawAngle(float angle)

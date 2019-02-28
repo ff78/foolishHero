@@ -9,6 +9,7 @@
 #include "GameDefine.h"
 #include "GameUtils.h"
 #include "MathAide.h"
+#include "logic/ClientLogic.hpp"
 
 USING_NS_CC;
 using namespace cocostudio;
@@ -51,6 +52,12 @@ void Hero::onEnter()
     Node::onEnter();
 }
 
+void Hero::onExit()
+{
+    Node::onExit();
+    unscheduleUpdate();            
+}
+
 void Hero::updateState()
 {
     
@@ -66,6 +73,9 @@ void Hero::changeState(HERO_STATES nextState)
 {
     if(currState == nextState)
         return;
+    if (currState == DIE && nextState != RELIVE) {
+        return;
+    }
 //    log("change hero state from %d to %d", currState, nextState);
     exitState(currState);
     lastState    = currState;
@@ -78,7 +88,7 @@ void Hero::enterState(HERO_STATES nextState)
     switch (nextState) {
         case STAND:
         {
-            skeletonNode->setEmptyAnimation(0, 0.4);
+//            skeletonNode->clearTracks();
             skeletonNode->setMix("hoverboard", "walk", 0.4);
             skeletonNode->setMix("walk", "idle", 0.4);
             skeletonNode->setAnimation(0, "hoverboard", true);
@@ -101,6 +111,23 @@ void Hero::enterState(HERO_STATES nextState)
             originArmAngle = skeletonNode->findBone("rear-upper-arm")->data->rotation;
             spTrackEntry *shootTrack = skeletonNode->setAnimation(1, "shoot", false);
             skeletonNode->setTrackCompleteListener(shootTrack, CC_CALLBACK_1(Hero::endLoose, this));
+        }
+            break;
+            
+        case DIE:
+        {
+//            skeletonNode->setEmptyAnimation(0, 0.4);
+            skeletonNode->clearTracks();
+//            skeletonNode->setEmptyAnimation(1, 0.1);
+            spTrackEntry *deathTrack = skeletonNode->setAnimation(0, "death", false);
+            skeletonNode->setTrackCompleteListener(deathTrack, CC_CALLBACK_1(Hero::endDeath, this));
+            
+        }
+            break;
+        case RELIVE:
+        {
+            skeletonNode->setVisible(true);
+            changeState(STAND);
         }
             break;
             
@@ -184,6 +211,7 @@ void Hero::setupView(std::string res)
 //    auto spData = spSkeletonJson_readSkeletonDataFile(_json , "spineboy-pro.json");
 //    //创建
 //    skeletonNode = SkeletonAnimation::createWithData(spData);
+    
     skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.2);
     
 //    skeletonNode->setStartListener( [] (spTrackEntry* entry) {
@@ -217,8 +245,16 @@ void Hero::setupView(std::string res)
     scheduleUpdate();
 }
 
+void Hero::relive()
+{
+    changeState(RELIVE);
+}
+
 void Hero::back2Stand()
 {
+    if (currState == DIE) {
+        return;
+    }
     changeState(STAND);
 }
 
@@ -236,8 +272,27 @@ void Hero::endLoose(spTrackEntry *entry)
     back2Stand();
 }
 
+void Hero::endDeath(spTrackEntry *entry)
+{
+//    skeletonNode->clearTracks();
+//    skeletonNode->removeFromParent();
+//    skeletonNode->clearTracks();
+    skeletonNode->setVisible(false);
+//    removeChild(skeletonNode);
+//    skeletonNode->pause();
+    E2L_CAN_RELIVE info;
+    info.eProtocol = e2l_can_relive;
+    info.userId = userId;
+    ClientLogic::instance()->ProcessUIRequest(&info);
+
+//    removeFromParent();
+}
+
 int Hero::hitCheck(Vec2 arrowCenter, float angle, Size arrowSize)
 {
+    if (currState == DIE) {
+        return 0;
+    }
     if(MathAide::rectHitTest(arrowCenter, arrowSize, angle, getPosition() + headRect.origin+headRect.size/2, headRect.size, 0))
     {
         return 1;
@@ -295,6 +350,33 @@ void Hero::hitBySpear(L2E_HIT_HERO data)
         return;
     }
     
+//    int fontWidth;
+//    int fontHeight;
+//    std::string fontPath = "hurt/";
+//    if (data.critType == 1) {
+//        fontPath += "McritNum.png";
+//        fontWidth = 73;
+//        fontHeight = 77;
+//    }else{
+//        fontPath += "MhurtNum.png";
+//        fontWidth = 41;
+//        fontHeight = 44;
+//    }
+//    auto hurtText = TextAtlas::create(StringUtils::format("%d", abs(data.hurtValue)).c_str(), fontPath.c_str(), fontWidth, fontHeight, "0");
+//    int fontPosX = (flipX?1:-1)*60;
+//    fontPosX += rand()%15;
+//    hurtText->setPosition(Vec2(fontPosX, 120));
+//    addChild(hurtText);
+//    auto move = MoveBy::create(0.5, Vec2(0, (rand()%20)+50));
+//    auto scaleAction = ScaleTo::create(0.3, 0.2);
+//    auto fadeAction = FadeOut::create(0.2);
+//    auto ease = EaseInOut::create(move, 0.8);
+//    auto scaleSeq = Sequence::create(scaleAction, fadeAction, NULL);
+//    auto spawnAction = Spawn::create(ease, scaleSeq, NULL);
+//    auto removeAction = CallFunc::create([] (){
+//        hurtText->removeFromParent();
+//    });
+//    hurtText->runAction(cocos2d::Action *action)
     switch(data.hurtBone)
     {
         case 0:
@@ -324,6 +406,9 @@ void Hero::hitBySpear(L2E_HIT_HERO data)
             count.duration = maxShowSpearDuration;
             count.hurtBone = 1;
             showSpearCountDown[data.arrowId] = count;
+            if (data.hp <= 0) {
+                changeState(DIE);
+            }
         }
             break;
     }
@@ -359,5 +444,5 @@ Vec2 Hero::getGuntipPos()
     float x = guntip->worldX;
     float y = guntip->worldY;
 //    return Vec2(x, y);
-    return Vec2(20,80);
+    return Vec2(20, 80);
 }

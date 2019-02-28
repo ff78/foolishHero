@@ -44,11 +44,16 @@ public:
     void drawMyBow(E2L_DRAW_A_BOW data);
     void looseMyArrow(E2L_LOOSE data);
     void hitHero(E2L_HIT_HERO data);
+    void canRelive(E2L_CAN_RELIVE data);
     
     float convertDrawAngle(float angle);
 protected:
     virtual void onLoadFinish();
 private:
+    int heroHp[2];
+    const int maxMyHP = 500;
+    const int maxMasterHP = 400;
+    int heroReliveCount[2];
     CC_SYNTHESIZE_READONLY(bool, flipXOpt, FlipXOpt);
     CC_SYNTHESIZE_READONLY(FIGHT_GAME_STATES, currState, CurrState);
     CC_SYNTHESIZE_READONLY(FIGHT_GAME_STATES, lastState, LastState);

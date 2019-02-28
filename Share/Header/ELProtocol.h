@@ -17,6 +17,7 @@ enum E2LProtocol
     e2l_shown_battle,                                   //  已显示战场
     e2l_draw_bow,                                       //  拉开弓
     e2l_loose,                                          //  放箭
+    e2l_can_relive,                                     //  死亡动画放完，可以开始复活
     
     e2l_hit_hero,                                       //  击中
     e2l_max
@@ -31,6 +32,8 @@ enum L2EProtocol
     l2e_setup_foo,                                      //  设置玩家位置
     l2e_draw_bow,                                       //  拉开弓
     l2e_loose,                                          //  放箭
+    l2e_relive_hero,                                    //  复活某某人
+    l2e_show_round_end,                                 //  显示结算界面
     
     l2e_hit_hero,                                       //  击中
 
@@ -121,5 +124,30 @@ typedef struct __L2E_HIT_HERO
     float                       arrowPosY;
     int                         hurtValue;
     int                         critType;
+    int                         hp;
 }L2E_HIT_HERO;
+
+typedef struct __E2L_CAN_RELIVE
+{
+    E2LProtocol                 eProtocol;
+    int                         userId;
+}E2L_CAN_RELIVE;
+
+typedef struct __L2E_RELIVE_HERO
+{
+    L2EProtocol                 eProtocol;
+    int                         userId;
+    int                         posx;
+    int                         posy;
+    bool                        flipX;
+    int                         hpValue;
+    int                         reliveCount;
+    
+    int                         myUserId;
+}L2E_RELIVE_HERO;
+
+typedef struct __L2E_SHOW_ROUND_END
+{
+    L2EProtocol                 eProtocol;
+}L2E_SHOW_ROUND_END;
 #endif /* ELProtocol_h */

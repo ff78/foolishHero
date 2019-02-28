@@ -9,6 +9,7 @@
 #include "logic/ClientLogic.hpp"
 #include "EventDefine.h"
 #include "scene/GameScene.hpp"
+#include "scene/HallScene.hpp"
 
 USING_NS_CC;
 
@@ -21,6 +22,8 @@ UIManager::UIManager()
     m_Logic2EngineFunc[l2e_loose] = &UIManager::loose;
     m_Logic2EngineFunc[l2e_draw_bow] = &UIManager::drawABow;
     m_Logic2EngineFunc[l2e_hit_hero] = &UIManager::hitHero;
+    m_Logic2EngineFunc[l2e_relive_hero] = &UIManager::reliveHero;
+    m_Logic2EngineFunc[l2e_show_round_end] = &UIManager::showRoundEnd;
     
 }
 
@@ -87,4 +90,21 @@ void UIManager::hitHero(void *pMsg)
     EventCustom event(HIT_HERO);
     event.setUserData(pMsg);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+}
+
+void UIManager::reliveHero(void *pMsg)
+{
+    EventCustom event(RELIVE_HERO);
+    event.setUserData(pMsg);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+}
+
+void UIManager::showRoundEnd(void *pMsg)
+{
+    auto scene = HallScene::create();
+    if (Director::getInstance()->getRunningScene() != nullptr) {
+        Director::getInstance()->replaceScene(scene);
+    }else{
+        Director::getInstance()->runWithScene(scene);
+    }
 }
