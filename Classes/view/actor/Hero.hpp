@@ -84,6 +84,7 @@ private:
     
     float originHeadAngle;
     float originArmAngle;
+    bool done;
     
     CC_SYNTHESIZE_READONLY(HERO_STATES, currState, CurrState);
     CC_SYNTHESIZE_READONLY(HERO_STATES, lastState, LastState);

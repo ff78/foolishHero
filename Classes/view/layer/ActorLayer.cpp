@@ -115,7 +115,7 @@ void ActorLayer::reliveFoo(cocos2d::EventCustom *event)
         me->setUserId(data.userId);
         me->relive();
     }else{
-        master->relive();
+//        master->relive();
 //        if (master != nullptr) {
 //            master->removeFromParent();
 //        }

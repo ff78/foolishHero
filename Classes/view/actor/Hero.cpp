@@ -26,6 +26,7 @@ originHeadAngle(0)
     lastState = MAX;
     headRect = Rect::ZERO;
     showSpearCountDown.clear();
+    done = false;
 }
 
 Hero::~Hero()
@@ -65,8 +66,13 @@ void Hero::updateState()
 
 void Hero::update(float dt)
 {
-    getHeadBB();
-    countDownSpear(dt);
+
+//    if (currState == DIE && !done) {
+//        removeFromParent();
+//    }else{
+        getHeadBB();
+        countDownSpear(dt);
+//    }
 }
 
 void Hero::changeState(HERO_STATES nextState)
@@ -119,6 +125,7 @@ void Hero::enterState(HERO_STATES nextState)
 //            skeletonNode->setEmptyAnimation(0, 0.4);
             skeletonNode->clearTracks();
 //            skeletonNode->setEmptyAnimation(1, 0.1);
+            done = false;
             spTrackEntry *deathTrack = skeletonNode->setAnimation(0, "death", false);
             skeletonNode->setTrackCompleteListener(deathTrack, CC_CALLBACK_1(Hero::endDeath, this));
             
@@ -280,6 +287,7 @@ void Hero::endDeath(spTrackEntry *entry)
     skeletonNode->setVisible(false);
 //    removeChild(skeletonNode);
 //    skeletonNode->pause();
+    done = true;
     E2L_CAN_RELIVE info;
     info.eProtocol = e2l_can_relive;
     info.userId = userId;
